@@ -1,11 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Sora:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css" />
+
     <title>Cadastro Usuario</title>
 </head>
+
 <body>
-    
+
+    <div class="container">
+        <section class="header">
+            <h2>Cadastro</h2>
+        </section>
+
+        <form id="form" class="form">
+            <div class="form-content">
+                <label for="username">Nome do usuário</label>
+                <input type="text" id="username" placeholder="Digite seu nome" />
+            </div>
+
+
+            <div class="form-content">
+                <label for="cpf">CPF</label>
+                <input type="cpf" id="cpf" placeholder="Digite seu CPF" />
+            </div>
+
+            <div class="form-content">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Digite seu email" />
+            </div>
+
+            <div class="form-content">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha" />
+            </div>
+
+            <div class="form-content">
+                <label for="password-confirmation">Confirmação de senha</label>
+                <input type="password" id="password-confirmation" placeholder="Digite sua senha novamente" />
+            </div>
+
+            <p>Status:</p><br>
+            <div class="box-select">
+                <div>
+                    <input type="radio" id="status" value="s" name="status">
+                    <label for="status">Nativo</label>
+
+                    <input type="radio" id="status" value="s" name="status">
+                    <label for="status">Inativo</label>
+                </div>
+            </div><br>
+
+            <p>Grupo:</p><br>
+            <input type="radio" id="grupo" value="g" name="grupo">
+            <label for="status">Administrador</label>
+
+            <input type="radio" id="grupo" value="g" name="grupo">
+            <label for="status">Estoquista</label>
+    </div>
+</form>
+</div>
 </body>
 </html>
