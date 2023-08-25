@@ -1,27 +1,30 @@
 package br.com.pi4.dao;
 
 import br.com.pi4.model.Pi4;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class pi4DAO {
-    private static String driver = "com.mysql.cj.jdbc.Driver";
+    private static final String DB_URL = "jdbc:mysql://localhost/PI4";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+    private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private Connection conexao() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/PI4", "vini", "123@Mudar");
-
-        return connection;
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
-    public void createUser(Pi4 pi4) {
 
+    public void createUser(Pi4 pi4) {
         String SQL = "INSERT INTO USER_BACKOFFICE (NAME, EMAIL, PASSWORD, CPF, STATUS, GROUP_USER) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
-
-            Class.forName(driver);
+            Class.forName(DB_DRIVER);
 
             Connection connection = conexao();
 
@@ -34,26 +37,25 @@ public class pi4DAO {
             preparedStatement.setString(5, pi4.getStatus());
             preparedStatement.setString(6, pi4.getGroup_user());
 
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
 
+            preparedStatement.close();
             connection.close();
 
-            System.out.println("success in insertion");
-
-        } catch (Exception e) {
-
-            System.out.println("fail in connection");
-
+            System.out.println("Success in insertion");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Driver not found");
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
         }
     }
-
 
     public List<Pi4> findAllUser() {
         String SQL = "SELECT * FROM USER_BACKOFFICE";
 
         try
         {
-            Class.forName(driver);
+            Class.forName(DB_DRIVER);
 
             Connection connection = conexao();
             System.out.println("Success in database connection");
@@ -87,17 +89,14 @@ public class pi4DAO {
             System.out.println("Fail in database connection!");
             return Collections.emptyList();
         }
-
-
     }
 
     public void deleteUserById (String id){
         String SQL = "DELETE FROM USER_BACKOFFICE WHERE ID_USER = ?";
 
-
         try {
 
-            Class.forName(driver);
+            Class.forName(DB_DRIVER);
 
             Connection connection = conexao();
 
@@ -121,7 +120,7 @@ public class pi4DAO {
         String SQL = "UPDATE USER_BACKOFFICE SET NAME = ?, EMAIL = ?, PASSWORD = ?, CPF = ?, STATUS = ?, GROUP_USER = ? WHERE ID_USER = ?";
         try {
 
-            Class.forName(driver);
+            Class.forName(DB_DRIVER);
 
             Connection connection = conexao();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL);
@@ -146,5 +145,4 @@ public class pi4DAO {
 
         }
     }
-
 }
