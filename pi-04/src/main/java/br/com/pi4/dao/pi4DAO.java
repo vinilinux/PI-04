@@ -10,7 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class pi4DAO {
+public class pi4DAO
+{
     private static final String DB_URL = "jdbc:mysql://localhost/PI4";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "";
@@ -116,7 +117,7 @@ public class pi4DAO {
 
         }
     }
-    public void updatePi4(Pi4 pi4) {
+    public Pi4 updatePi4(Pi4 pi4) {
         String SQL = "UPDATE USER_BACKOFFICE SET NAME = ?, EMAIL = ?, PASSWORD = ?, CPF = ?, STATUS = ?, GROUP_USER = ? WHERE ID_USER = ?";
         try {
 
@@ -144,5 +145,47 @@ public class pi4DAO {
             System.out.println("Error: " + e.getMessage());
 
         }
+            return pi4;
+
     }
-}
+        public Pi4 loginUser(String email, String password) {
+            String SQL = "SELECT * FROM USER_BACKOFFICE WHERE EMAIL = ? AND PASSWORD = ?";
+
+            Pi4 user = null;
+
+            try {
+                Class.forName(DB_DRIVER);
+                Connection connection = conexao();
+                PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+                preparedStatement.setString(1, email);
+                preparedStatement.setString(2, password);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    user = new Pi4(
+                            resultSet.getString("ID_USER"),
+                            resultSet.getString("NAME"),
+                            resultSet.getString("EMAIL"),
+                            resultSet.getString("PASSWORD"),
+                            resultSet.getString("CPF"),
+                            resultSet.getString("STATUS"),
+                            resultSet.getString("GROUP_USER")
+                    );
+                }
+
+                resultSet.close();
+                preparedStatement.close();
+                connection.close();
+                System.out.println("success in login attempt");
+
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+                System.out.println("fail in login attempt");
+            }
+
+            return user;
+        }
+
+    }
