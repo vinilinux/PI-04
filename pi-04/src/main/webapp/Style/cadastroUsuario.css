@@ -53,3 +53,13 @@ body{
     padding: 8px;
     border: 2px solid #dfdfdf;
 }
+
+.erro {
+    border: 1px solid red !important;
+}
+
+.erro-msg {
+    color: red !important;
+    font-size: 12px !important;
+}
+

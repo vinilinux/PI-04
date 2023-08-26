@@ -12,11 +12,18 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Sora:wght@300;400;500;600&display=swap"
       rel="stylesheet">
 
-    <link rel="stylesheet" href="/Style/cadastroUsuario.css" />
-    <script src="/JavaScript/script.js"></script>
+
+
 
 
     <title>Cadastro Usuario</title>
+
+    <link rel="stylesheet" href="/Style/cadastroUsuario.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.6/jquery.inputmask.min.js"></script>
+    <script src="/JavaScript/script.js"></script>
+
+
 </head>
 
 <body>
@@ -35,6 +42,7 @@
         <div class="form-content">
             <label for="cpf">CPF</label>
             <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" value="${param.cpf}" required/>
+            <span class="erro-msg"></span>
         </div>
 
         <div class="form-content">
@@ -80,5 +88,7 @@
         </div>
     </form>
 </body>
+
+
 
 </html>
