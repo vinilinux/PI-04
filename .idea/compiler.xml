@@ -9,5 +9,8 @@
         <module name="pi-04" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="pi-04" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
