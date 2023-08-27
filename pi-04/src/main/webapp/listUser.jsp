@@ -49,6 +49,7 @@
         <th>CPF</th>
         <th>Status</th>
         <th>Group user</th>
+        <th>Alterar</th>
     </tr>
     <c:forEach var="pi4" items="${pi4List}">
         <tr>
@@ -58,6 +59,7 @@
             <td>${pi4.getCpf()}</td>
             <td>${pi4.getStatus()}</td>
             <td>${pi4.getGroup_user()}</td>
+            <td><a href="cadastroUsuario.jsp">Alterar</a></td>
         </tr>
     </c:forEach>
 </table>
