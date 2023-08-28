@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
+
 
 @WebServlet("/login")
 public class LoginUserServlet extends HttpServlet {
@@ -27,14 +29,16 @@ public class LoginUserServlet extends HttpServlet {
         Pi4 user = userDao.loginUser(email, password);
 
         if (user != null) {
-
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect("index.jsp");
-        } else {
+            String loggedInUserId = user.getId_user();
+            session.setAttribute("loggedInUserId", loggedInUserId);
 
-            request.setAttribute("errorMessage", "E-mail ou senha inválido!");
-            request.getRequestDispatcher("/loginUsuario.jsp").forward(request, response);
+            List<Pi4> users = userDao.findAllUser(loggedInUserId);
+            session.setAttribute("otherUsers", users);
+
+            response.sendRedirect("index.jsp");
         }
+
     }
 }
