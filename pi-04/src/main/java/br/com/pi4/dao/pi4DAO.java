@@ -11,7 +11,7 @@ public class pi4DAO {
     private static String driver = "com.mysql.cj.jdbc.Driver";
 
     private Connection conexao() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/PI4", "vini", "123@Mudar");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://database-1.cqpzu4xulkxe.us-east-1.rds.amazonaws.com/PI4", "admin", "ZEaSlyGixomBEimUBnE3");
 
         return connection;
     }
