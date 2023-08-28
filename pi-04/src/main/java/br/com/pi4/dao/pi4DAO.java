@@ -83,7 +83,7 @@ public class pi4DAO
             connection.close();
         } catch (Exception e) {
             System.out.println("Fail in database connection!");
-            e.printStackTrace();  // Isso ajudará você a ver o erro exato, se houver
+            e.printStackTrace();
         }
 
         return pi4List;
