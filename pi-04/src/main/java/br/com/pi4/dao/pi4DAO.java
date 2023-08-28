@@ -18,7 +18,7 @@ public class pi4DAO
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private Connection conexao() throws SQLException {
-<<<<<<< HEAD
+
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
