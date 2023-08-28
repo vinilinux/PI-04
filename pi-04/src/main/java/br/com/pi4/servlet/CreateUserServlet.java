@@ -26,10 +26,8 @@ public class CreateUserServlet extends HttpServlet {
 
 
     }*/
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id_user = request.getParameter("id_user");
-        String name = request.getParameter("name");
+        String name = request.getParameter("username");
         String cpf = request.getParameter("cpf");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -38,17 +36,12 @@ public class CreateUserServlet extends HttpServlet {
 
         String hashedPassword = hashPassword(password);
 
-        Pi4 pi4 = new Pi4(id_user, name, email, hashedPassword, cpf, status, group_user);
+        Pi4 pi4 = new Pi4(name, email, hashedPassword, cpf, status, group_user);
+
         pi4DAO db = new pi4DAO();
+        db.createUser(pi4);
 
-        if (id_user != null && !id_user.isEmpty()) {
-            db.updatePi4(pi4);
-            response.getWriter().println("Usuário atualizado com sucesso!");
-        } else {
-            db.createUser(pi4);
-            response.getWriter().println("Usuário cadastrado com sucesso!");
-        }
-
+        response.getWriter().println("Usuário cadastrado com sucesso!");
     }
 
     private String hashPassword(String password) {

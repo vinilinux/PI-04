@@ -27,13 +27,6 @@ public class Pi4 {
 
     }
 
-    public java.lang.String getId_user() {
-        return id_user;
-    }
-
-    public void setId_user(java.lang.String id_user) {
-        this.id_user = id_user;
-    }
 
     public String getName() {
         return name;
