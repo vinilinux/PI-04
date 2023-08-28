@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class pi4DAO
 {
@@ -51,22 +54,20 @@ public class pi4DAO
         }
     }
 
-    public List<Pi4> findAllUser() {
-        String SQL = "SELECT * FROM USER_BACKOFFICE";
+    public List<Pi4> findAllUser(String loggedInUserId) {
+        String SQL = "SELECT * FROM USER_BACKOFFICE WHERE ID_USER <> ?";
+        List<Pi4> pi4List = new ArrayList<>();  // Renomeado para evitar confusões
 
-        try
-        {
+        try {
             Class.forName(DB_DRIVER);
-
             Connection connection = conexao();
-            System.out.println("Success in database connection");
             PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, loggedInUserId);
+
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            List<Pi4> pi4 = new ArrayList<Pi4>();
-
-            while(resultSet.next())
-            {
+            while (resultSet.next()) {
                 String id_user = resultSet.getString("ID_USER");
                 String name = resultSet.getString("NAME");
                 String email = resultSet.getString("EMAIL");
@@ -75,22 +76,19 @@ public class pi4DAO
                 String status = resultSet.getString("STATUS");
                 String group_user = resultSet.getString("GROUP_USER");
 
-                Pi4 pi4s = new Pi4(id_user, name, email, password, cpf, status, group_user);
-                pi4.add(pi4s);
+                Pi4 pi4 = new Pi4(id_user, name, email, password, cpf, status, group_user);
+                pi4List.add(pi4);
             }
 
-            System.out.println("Success in select * USER_BACKOFFICE");
-
             connection.close();
-
-            return pi4;
-
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Fail in database connection!");
-            return Collections.emptyList();
+            e.printStackTrace();
         }
+
+        return pi4List;
     }
+
 
     public void deleteUserById (String id){
         String SQL = "DELETE FROM USER_BACKOFFICE WHERE ID_USER = ?";
@@ -117,37 +115,7 @@ public class pi4DAO
 
         }
     }
-    public Pi4 updatePi4(Pi4 pi4) {
-        String SQL = "UPDATE USER_BACKOFFICE SET NAME = ?, EMAIL = ?, PASSWORD = ?, CPF = ?, STATUS = ?, GROUP_USER = ? WHERE ID_USER = ?";
-        try {
 
-            Class.forName(DB_DRIVER);
-
-            Connection connection = conexao();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
-
-            preparedStatement.setString(1, pi4.getName());
-            preparedStatement.setString(2, pi4.getEmail());
-            preparedStatement.setString(3, pi4.getPassword());
-            preparedStatement.setString(4, pi4.getCpf());
-            preparedStatement.setString(5, pi4.getStatus());
-            preparedStatement.setString(6, pi4.getGroup_user());
-
-            preparedStatement.execute();
-
-            connection.close();
-
-            System.out.println("success in update");
-
-        } catch (Exception e) {
-
-            System.out.println("fail in connection");
-            System.out.println("Error: " + e.getMessage());
-
-        }
-            return pi4;
-
-    }
         public Pi4 loginUser(String email, String password) {
             String SQL = "SELECT * FROM USER_BACKOFFICE WHERE EMAIL = ? AND PASSWORD = ?";
 
@@ -188,4 +156,67 @@ public class pi4DAO
             return user;
         }
 
+    public Pi4 getUserById(String id)
+    {
+        Pi4 user = null;
+        String sql = "SELECT * FROM USER_BACKOFFICE WHERE ID_USER = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD); // Correção feita aqui
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new Pi4();
+                    user.setId_user(rs.getString("ID_USER"));
+                    user.setName(rs.getString("NAME"));
+                    user.setEmail(rs.getString("EMAIL"));
+                    user.setPassword(rs.getString("PASSWORD"));
+                    user.setCpf(rs.getString("CPF"));
+                    user.setStatus(rs.getString("STATUS"));
+                    user.setGroup_user(rs.getString("GROUP_USER"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
     }
+
+    public Pi4 updatePi4(Pi4 pi4) {
+        String SQL = "UPDATE USER_BACKOFFICE SET NAME = ?, EMAIL = ?, PASSWORD = ?, CPF = ?, STATUS = ?, GROUP_USER = ? WHERE ID_USER = ?";
+        try {
+
+            Class.forName(DB_DRIVER);
+
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, pi4.getName());
+            preparedStatement.setString(2, pi4.getEmail());
+            preparedStatement.setString(3, pi4.getPassword());
+            preparedStatement.setString(4, pi4.getCpf());
+            preparedStatement.setString(5, pi4.getStatus());
+            preparedStatement.setString(6, pi4.getGroup_user());
+            preparedStatement.setString(7, pi4.getId_user());
+
+            System.out.println("Attempting to update user with ID: " + pi4.getId_user());
+
+            preparedStatement.executeUpdate();
+
+            connection.close();
+
+            System.out.println("success in update");
+
+        } catch (Exception e) {
+
+            System.out.println("fail in connection");
+            System.out.println("Error: " + e.getMessage());
+
+        }
+        return pi4;
+
+    }
+
+
+}

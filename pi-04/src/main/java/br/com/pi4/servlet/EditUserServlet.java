@@ -13,20 +13,27 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-@WebServlet("/CreateUserServlet")
-public class CreateUserServlet extends HttpServlet {
 
-    /*public static void main(String[] args) {
+@WebServlet("/EditUserServlet")
+public class EditUserServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
-        Pi4 pi4 = new Pi4("vinicius", "vini@teste.com", "123@Mudar", "12345678910", "habilitado", "admin");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        pi4DAO db = new pi4DAO();
-        db.createUser(pi4);
-        //db.deleteUserById("1");
+        String userId = request.getParameter("id");
+
+        pi4DAO userDao = new pi4DAO();
+        Pi4 user = userDao.getUserById(userId);
+
+        request.setAttribute("user", user);
 
 
-    }*/
 
+        request.getRequestDispatcher("/cadastroUsuario.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id_user = request.getParameter("id_user");
         String name = request.getParameter("name");
@@ -36,19 +43,16 @@ public class CreateUserServlet extends HttpServlet {
         String status = "ativo";
         String group_user = request.getParameter("grupo");
 
+        System.out.println("ID: " + id_user);
+        System.out.println("Name: " + name);
         String hashedPassword = hashPassword(password);
 
         Pi4 pi4 = new Pi4(id_user, name, email, hashedPassword, cpf, status, group_user);
         pi4DAO db = new pi4DAO();
 
-        if (id_user != null && !id_user.isEmpty()) {
-            db.updatePi4(pi4);
-            response.getWriter().println("Usuário atualizado com sucesso!");
-        } else {
-            db.createUser(pi4);
-            response.getWriter().println("Usuário cadastrado com sucesso!");
-        }
+        db.updatePi4(pi4);
 
+        response.getWriter().println("Usuário atualizado com sucesso!");
     }
 
     private String hashPassword(String password) {
@@ -61,4 +65,5 @@ public class CreateUserServlet extends HttpServlet {
         }
         return null;
     }
+
 }
