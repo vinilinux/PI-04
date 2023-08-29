@@ -12,18 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet ("/listUser")
-public class ListUserServlet extends HttpServlet{
-    @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        pi4DAO db = new pi4DAO();
-        db.findAllUser();
-        List<Pi4> pi4Select = db.findAllUser();
+@WebServlet ("/ListUserServlet")
+public class ListUserServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
-        request.setAttribute("pi4List", pi4Select);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/listUser.jsp");
-        dispatcher.forward(request, response);
+        pi4DAO userDao = new pi4DAO();
+
+        String loggedInUserId = (String) request.getSession().getAttribute("loggedInUserId");
+        List<Pi4> users = userDao.findAllUser(loggedInUserId);
+        request.setAttribute("usersList", users);
+
+        request.getRequestDispatcher("/listUser.jsp").forward(request, response);
     }
-
 }

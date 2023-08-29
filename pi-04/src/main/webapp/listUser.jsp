@@ -41,27 +41,36 @@
     <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
 </button>
 </a>
-<table>
-    <tr>
-        <th>Nome</th>
-        <th>E-mail</th>
-        <th>Password</th>
-        <th>CPF</th>
-        <th>Status</th>
-        <th>Group user</th>
-        <th>Alterar</th>
-    </tr>
-    <c:forEach var="pi4" items="${pi4List}">
-        <tr>
-            <td>${pi4.getName()}</td>
-            <td>${pi4.getEmail()}</td>
-            <td>${pi4.getPassword()}</td>
-            <td>${pi4.getCpf()}</td>
-            <td>${pi4.getStatus()}</td>
-            <td>${pi4.getGroup_user()}</td>
-            <td><a href="cadastroUsuario.jsp">Alterar</a></td>
-        </tr>
-    </c:forEach>
-</table>
+<table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Senha</th>
+                <th>CPF</th>
+                <th>Status</th>
+                <th>Grupo de usuario</th>
+                <th>Alterar</th>
+                <th>Deletar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="user" items="${usersList}">
+                <tr>
+                    <td>${user.id_user}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.password}</td>
+                    <td>${user.cpf}</td>
+                    <td>${user.status}</td>
+                    <td>${user.group_user}</td>
+                    <td><a href="EditUserServlet?id=${user.id_user}">alterar usuario</td>
+                    <td><button>Deletar usuario</button></td>
+
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
 </body>
 </html>

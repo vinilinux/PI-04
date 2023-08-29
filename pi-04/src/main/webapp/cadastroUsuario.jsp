@@ -33,31 +33,38 @@
       <h2>Cadastro</h2>
     </section>
 
-    <form id="form" class="form" action="CreateUserServlet" method="post">
+<form id="form" class="form" action="${empty user.id_user ? '/CreateUserServlet' : '/EditUserServlet'}" method="post">
+    <input type="hidden" name="mode" value="${empty param.id_user ? 'create' : 'update'}"/>
+
+        <c:if test="${not empty user.id_user}">
+       <input type="hidden" name="id_user" value="${user.id_user}"/>
+        </c:if>
+
+
         <div class="form-content">
             <label for="username">Nome do usuário</label>
-            <input type="text" id="username" name="username" placeholder="Digite seu nome" value="${param.username}" required />
+            <input type="text" id="name" name="name" placeholder="Digite seu nome" value="${user.name}" required />
         </div>
 
         <div class="form-content">
             <label for="cpf">CPF</label>
-            <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" value="${param.cpf}" required/>
+            <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" value="${user.cpf}" required/>
             <span class="erro-msg"></span>
         </div>
 
         <div class="form-content">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Digite seu email" value="${param.email}" required/>
+            <input type="email" id="email" name="email" placeholder="Digite seu email" value="${user.email}" required/>
         </div>
 
         <div class="form-content">
             <label for="password">Senha</label>
-            <input type="password" id="password" name="password" placeholder="Digite sua senha" value="${param.password}" required />
+            <input type="password" id="password" name="password" placeholder="Digite sua senha" value="${user.password}" required />
         </div>
 
         <div class="form-content">
             <label for="password-confirmation">Confirmação de senha</label>
-            <input type="password" id="password-confirmation" name="password-confirmation" placeholder="Digite sua senha novamente" required />
+            <input type="password" id="password-confirmation" name="password-confirmation" placeholder="Digite sua senha novamente" value="${user.password}" required />
         </div>
 
         <div class="error-message" id="error-message"></div>
@@ -68,20 +75,27 @@
         <div class="box-select">
             <div>
 
-                <input type="radio" id="status-ativo" value="ativo" name="status" checked>
+                <input type="radio" id="status-ativo" value="ativo" name="status"
+                       ${user.status == 'ativo' ? 'checked' : ''}>
                 <label for="status-ativo">Ativo</label>
 
-                <input type="radio" id="status-inativo" value="inativo" name="status">
+                <input type="radio" id="status-inativo" value="inativo" name="status"
+                       ${user.status == 'inativo' ? 'checked' : ''}>
                 <label for="status-inativo">Inativo</label>
+
             </div>
         </div><br>
 
         <p>Grupo:</p><br>
-        <input type="radio" id="grupo-admin" value="administrador" name="grupo" value="${param.grupo}" required>
+        <input type="radio" id="grupo-admin" value="administrador" name="grupo"
+               ${user.group_user == 'administrador' ? 'checked' : ''}>
         <label for="grupo-admin">Administrador</label>
 
-        <input type="radio" id="grupo-estoq" value="estoquista" name="grupo" value="${param.grupo}" required>
+        <input type="radio" id="grupo-estoq" value="estoquista" name="grupo"
+               ${user.group_user == 'estoquista' ? 'checked' : ''}>
         <label for="grupo-estoq">Estoquista</label>
+
+
 
         <div class="form-content">
             <button type="submit">Cadastrar</button>
