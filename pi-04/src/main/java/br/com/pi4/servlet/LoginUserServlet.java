@@ -22,30 +22,29 @@ public class LoginUserServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
+        HashServlet hashpass = new HashServlet();
+
+        String hashedPassword = null;
+        try {
+            hashedPassword = hashpass.encryptarSenha(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
         System.out.println("Email: " + email);
-        System.out.println("Password: " + hashPassword(password));
+        System.out.println("Password: " + hashedPassword);
 
         pi4DAO db = new pi4DAO();
-        Pi4 user = db.loginUser(email, hashPassword(password));
+        Pi4 user = db.loginUser(email, hashedPassword);
 
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("principal.jsp");
         } else {
             request.setAttribute("errorMessage", "E-mail ou senha inválido!");
             request.getRequestDispatcher("/loginUsuario.jsp").forward(request, response);
         }
     }
 
-    private String hashPassword(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(password.getBytes());
-            return Base64.getEncoder().encodeToString(hashBytes);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

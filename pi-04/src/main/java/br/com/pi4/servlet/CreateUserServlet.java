@@ -15,17 +15,6 @@ import java.util.Base64;
 
 @WebServlet("/CreateUserServlet")
 public class CreateUserServlet extends HttpServlet {
-
-    /*public static void main(String[] args) {
-
-        Pi4 pi4 = new Pi4("vinicius", "vini@teste.com", "123@Mudar", "12345678910", "habilitado", "admin");
-
-        pi4DAO db = new pi4DAO();
-        db.createUser(pi4);
-        //db.deleteUserById("1");
-
-
-    }*/
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("username");
         String cpf = request.getParameter("cpf");
@@ -34,7 +23,14 @@ public class CreateUserServlet extends HttpServlet {
         String status = "ativo";
         String group_user = request.getParameter("grupo");
 
-        String hashedPassword = hashPassword(password);
+        HashServlet hashpass = new HashServlet();
+
+        String hashedPassword = null;
+        try {
+            hashedPassword = hashpass.encryptarSenha(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
 
         Pi4 pi4 = new Pi4(name, email, hashedPassword, cpf, status, group_user);
 
@@ -44,14 +40,4 @@ public class CreateUserServlet extends HttpServlet {
         response.getWriter().println("Usuário cadastrado com sucesso!");
     }
 
-    private String hashPassword(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(password.getBytes());
-            return Base64.getEncoder().encodeToString(hashBytes);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
