@@ -1,10 +1,29 @@
 document.addEventListener("DOMContentLoaded", function() {
     const statusNativo = document.getElementById("status-ativo");
     const statusInativo = document.getElementById("status-inativo");
+    const modeInput = document.querySelector("input[name='mode']");
+    const emailInput = document.getElementById("email");
 
-    statusNativo.checked = true;
-    statusInativo.disabled = true;
+    function updateStatusField(mode) {
+        if (mode === "update") {
+            statusInativo.disabled = false;
+            emailInput.disabled = true;
+        } else {
+            statusInativo.disabled = true;
+            statusNativo.checked = true;
+            emailInput.disabled = false;
+        }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get("mode");
+
+    updateStatusField(mode);
 });
+
+
+
+
 
 
 document.addEventListener("DOMContentLoaded", function() {
