@@ -22,7 +22,7 @@
 <div class="menu-container">
     <div class="menu">
         <a href="#" class="btn btn-primary">Listar Produtos</a>
-        <a href="#" class="btn btn-primary">Listar Usuários</a>
+        <a href="/ListUserServlet" class="btn btn-primary">Listar Usuários</a>
         <a href="#" class="btn btn-primary">Listar Pedidos</a>
     </div>
 </div>
