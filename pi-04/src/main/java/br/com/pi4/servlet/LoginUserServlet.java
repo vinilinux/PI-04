@@ -40,7 +40,11 @@ public class LoginUserServlet extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect("principal.jsp");
+            if (user.getGroup_user().equals("administrador")) {
+                response.sendRedirect("admin.jsp");
+            } else {
+                response.sendRedirect("estoque.jsp");
+            }
         } else {
             request.setAttribute("errorMessage", "E-mail ou senha inválido!");
             request.getRequestDispatcher("/loginUsuario.jsp").forward(request, response);
