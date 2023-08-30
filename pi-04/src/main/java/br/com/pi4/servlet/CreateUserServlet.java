@@ -15,6 +15,14 @@ import java.util.Base64;
 
 @WebServlet("/CreateUserServlet")
 public class CreateUserServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.getSession().removeAttribute("user");
+        request.getRequestDispatcher("/cadastroUsuario.jsp").forward(request, response);
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id_user = request.getParameter("id_user");
         String name = request.getParameter("name");
@@ -40,6 +48,7 @@ public class CreateUserServlet extends HttpServlet {
             db.updatePi4(pi4);
             response.getWriter().println("Usuário atualizado com sucesso!");
         } else {
+            pi4.setId_user(null);
             db.createUser(pi4);
             response.getWriter().println("Usuário cadastrado com sucesso!");
         }

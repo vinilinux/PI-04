@@ -100,6 +100,17 @@
         <div class="form-content">
             <button type="submit">Cadastrar</button>
         </div>
+
+        <script>
+        window.onload = function() {
+            var mode = document.querySelector("input[name='mode']").value;
+            if (mode === 'create') {
+                document.getElementById("form").reset();
+            }
+        }
+        </script>
+
+
     </form>
 </body>
 

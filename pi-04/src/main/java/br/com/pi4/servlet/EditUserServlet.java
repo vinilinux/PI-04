@@ -22,6 +22,12 @@ public class EditUserServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String userId = request.getParameter("id");
+        if (userId == null || userId.isEmpty()) {
+            request.getSession().removeAttribute("user");
+            response.sendRedirect("/cadastroUsuario.jsp");
+            return;
+        }
+
 
         pi4DAO userDao = new pi4DAO();
         Pi4 user = userDao.getUserById(userId);
