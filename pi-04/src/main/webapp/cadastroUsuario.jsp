@@ -54,8 +54,10 @@
 
         <div class="form-content">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Digite seu email" value="${user.email}" required/>
+            <input type="email" id="email" name="email" placeholder="Digite seu email" value="${user.email}" required disabled/>
+            <input type="hidden" id="hiddenEmail" name="hiddenEmail" value="${user.email}" />
         </div>
+
 
         <div class="form-content">
             <label for="password">Senha</label>

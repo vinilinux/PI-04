@@ -44,22 +44,34 @@ public class EditUserServlet extends HttpServlet {
         String id_user = request.getParameter("id_user");
         String name = request.getParameter("name");
         String cpf = request.getParameter("cpf");
-        String email = request.getParameter("email");
+        String email = request.getParameter("hiddenEmail");
         String password = request.getParameter("password");
-        String status = "ativo";
+        String status = request.getParameter("status");
         String group_user = request.getParameter("grupo");
 
         System.out.println("ID: " + id_user);
         System.out.println("Name: " + name);
-        String hashedPassword = hashPassword(password);
 
-        Pi4 pi4 = new Pi4(id_user, name, email, hashedPassword, cpf, status, group_user);
         pi4DAO db = new pi4DAO();
+        Pi4 user = db.getUserById(id_user);
 
-        db.updatePi4(pi4);
+        if (user != null) {
+            String currentHashedPassword = user.getPassword();
+            String newHashedPassword = currentHashedPassword;
 
-        response.getWriter().println("Usuário atualizado com sucesso!");
+            if (!password.isEmpty() && !password.equals(currentHashedPassword)) {
+                newHashedPassword = hashPassword(password);
+            }
+
+            Pi4 pi4 = new Pi4(id_user, name, email, newHashedPassword, cpf, status, group_user);
+            db.updatePi4(pi4);
+
+            response.getWriter().println("Usuário atualizado com sucesso!");
+        } else {
+            response.getWriter().println("Usuário não encontrado!");
+        }
     }
+
 
     private String hashPassword(String password) {
         try {

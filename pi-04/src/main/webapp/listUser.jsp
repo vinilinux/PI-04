@@ -52,7 +52,6 @@
                 <th>Status</th>
                 <th>Grupo de usuario</th>
                 <th>Alterar</th>
-                <th>Deletar</th>
             </tr>
         </thead>
         <tbody>
@@ -65,9 +64,7 @@
                     <td>${user.cpf}</td>
                     <td>${user.status}</td>
                     <td>${user.group_user}</td>
-                    <td><a href="EditUserServlet?id=${user.id_user}">alterar usuario</td>
-                    <td><button>Deletar usuario</button></td>
-
+                    <td><a href="EditUserServlet?id=${user.id_user}&mode=update">alterar usuario</td>
                 </tr>
             </c:forEach>
         </tbody>
