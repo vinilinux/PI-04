@@ -106,3 +106,41 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search');
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    // Função para filtrar a tabela com base no valor de pesquisa
+    function filterTable(searchTerm) {
+        tableRows.forEach(function(row) {
+            const username = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const shouldDisplay = username.includes(searchTerm);
+            row.style.display = shouldDisplay ? 'table-row' : 'none';
+        });
+    }
+
+    // Adicione um evento de entrada para atualizar o filtro conforme o usuário digita
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        filterTable(searchTerm);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search');
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    function filterTable(searchTerm) {
+        tableRows.forEach(function(row) {
+            const nameCell = row.querySelector('td:nth-child(2)');
+            const name = nameCell.textContent.toLowerCase();
+            const shouldDisplay = name.includes(searchTerm);
+            row.style.display = shouldDisplay ? 'table-row' : 'none';
+        });
+    }
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        filterTable(searchTerm);
+    });
+});
