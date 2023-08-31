@@ -1,6 +1,8 @@
 package br.com.pi4.model;
 
-public class Pi4 {
+import java.io.Serializable;
+
+public class Pi4 implements Serializable {
     private String id_user, name, email, password, cpf, status, group_user;
 
     public Pi4(){

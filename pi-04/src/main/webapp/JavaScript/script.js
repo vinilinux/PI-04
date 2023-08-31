@@ -23,10 +23,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function confirmAndUpdate(userId) {
     const form = document.getElementById(`updateForm${userId}`);
-    const newStatus = form.status.value;
+    const select = form.status;
+    const newStatus = select.value;
+
+    const selectCopy = select.cloneNode(true);
 
     if (confirm(`Confirma alteração do status para ${newStatus}?`)) {
         form.submit();
+    } else {
+        select.parentNode.replaceChild(selectCopy, select);
     }
 }
 
