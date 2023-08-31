@@ -21,10 +21,14 @@ document.addEventListener("DOMContentLoaded", function() {
     updateStatusField(mode);
 });
 
+function confirmAndUpdate(userId) {
+    const form = document.getElementById(`updateForm${userId}`);
+    const newStatus = form.status.value;
 
-
-
-
+    if (confirm(`Confirma alteração do status para ${newStatus}?`)) {
+        form.submit();
+    }
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     const passwordInput = document.getElementById("password");

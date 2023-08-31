@@ -42,32 +42,39 @@
 </button>
 </a>
 <table border="1">
-        <thead>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Grupo de usuário</th>
+            <th>Alterar</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="user" items="${usersList}">
             <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Senha</th>
-                <th>CPF</th>
-                <th>Status</th>
-                <th>Grupo de usuario</th>
-                <th>Alterar</th>
+                <td>${user.id_user}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>
+                    <form id="updateForm${user.id_user}" action="EditUserServlet" method="post">
+                        <input type="hidden" name="userId" value="${user.id_user}">
+                        <select name="status" onchange="confirmAndUpdate(${user.id_user})">
+                            <option value="ativo" ${user.status == 'ativo' ? 'selected' : ''}>Ativo</option>
+                            <option value="inativo" ${user.status == 'inativo' ? 'selected' : ''}>Inativo</option>
+                        </select>
+                        <input type="hidden" name="action" value="updateStatus">
+                    </form>
+                </td>
+                <td>${user.group_user}</td>
+                <td><a href="EditUserServlet?id=${user.id_user}&mode=update">alterar usuário</a></td>
             </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="user" items="${usersList}">
-                <tr>
-                    <td>${user.id_user}</td>
-                    <td>${user.name}</td>
-                    <td>${user.email}</td>
-                    <td>${user.password}</td>
-                    <td>${user.cpf}</td>
-                    <td>${user.status}</td>
-                    <td>${user.group_user}</td>
-                    <td><a href="EditUserServlet?id=${user.id_user}&mode=update">alterar usuario</td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+        </c:forEach>
+    </tbody>
+</table>
+
+
 </body>
 </html>
