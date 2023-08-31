@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @WebServlet("/CreateUserServlet")
 public class CreateUserServlet extends HttpServlet {
@@ -44,15 +46,24 @@ public class CreateUserServlet extends HttpServlet {
         Pi4 pi4 = new Pi4(id_user, name, email, hashedPassword, cpf, status, group_user);
         pi4DAO db = new pi4DAO();
 
-        if (id_user != null && !id_user.isEmpty()) {
-            db.updatePi4(pi4);
-            response.getWriter().println("Usuário atualizado com sucesso!");
-        } else {
-            pi4.setId_user(null);
-            db.createUser(pi4);
-            response.getWriter().println("Usuário cadastrado com sucesso!");
+        if (email != null && !email.isEmpty()){
+
+            if (db.isEmailAlreadyRegistered(email)){
+                response.getWriter().println("E-mail já cadastrado!");
+            }else {
+
+                if (id_user != null && !id_user.isEmpty()) {
+                    db.updatePi4(pi4);
+                    response.getWriter().println("Usuário atualizado com sucesso!");
+                } else {
+                    pi4.setId_user(null);
+                    db.createUser(pi4);
+                    response.getWriter().println("Usuário cadastrado com sucesso!");
+                }
+            }
+        }else{
+            response.getWriter().println("E-mail inválido.");
         }
 
     }
-
 }

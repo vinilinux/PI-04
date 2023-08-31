@@ -17,7 +17,7 @@ public class pi4DAO
 {
     private static final String DB_URL = "jdbc:mysql://localhost/PI4";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
+    private static final String DB_PASSWORD = "N0va-S3nh@";
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private Connection conexao() throws SQLException {
@@ -88,6 +88,35 @@ public class pi4DAO
         }
 
         return pi4List;
+    }
+
+
+    public boolean isEmailAlreadyRegistered(String email) {
+        String SQL = "SELECT * FROM USER_BACKOFFICE WHERE EMAIL = ?";
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            boolean isRegistered = resultSet.next();
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+
+            return isRegistered;
+        } catch (ClassNotFoundException e) {
+            System.out.println("Driver not found");
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+
+        return false;
     }
 
 
