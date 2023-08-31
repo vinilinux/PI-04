@@ -57,7 +57,7 @@ public class pi4DAO
 
     public List<Pi4> findAllUser(String loggedInUserId) {
         String SQL = "SELECT * FROM USER_BACKOFFICE WHERE ID_USER <> ?";
-        List<Pi4> pi4List = new ArrayList<>();  // Renomeado para evitar confusões
+        List<Pi4> pi4List = new ArrayList<>();
 
         try {
             Class.forName(DB_DRIVER);
@@ -246,6 +246,26 @@ public class pi4DAO
         }
         return pi4;
 
+    }
+
+    public boolean atualizarStatusUsuario(String userId, String novoStatus) {
+        String SQL = "UPDATE USER_BACKOFFICE SET STATUS = ? WHERE ID_USER = ?";
+        try {
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, novoStatus);
+            preparedStatement.setString(2, userId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            connection.close();
+
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
