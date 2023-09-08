@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <object-set>
+    <schema path="my_database">
+      <view name="virtual_view_name" query=""/>
+    </schema>
+  </object-set>
+</data>
