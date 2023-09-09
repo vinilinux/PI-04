@@ -1,12 +1,16 @@
 package br.com.pi4.model;
 
 public class Product {
-    private String id_product, name, rate, description, price, amount, status, imageProductPath, imageDefault;
+    private String id_product, name, description, status, imageProductPath, imageDefault;
+
+    private double rate, price;
+    private int amount;
 
     public Product() {
     }
 
-    public Product(String id_product, String name, String rate, String description, String price, String amount, String status) {
+    public Product(String id_product, String name, double rate, String description, double price, int amount,
+                   String status) {
         this.id_product = id_product;
         this.name = name;
         this.rate = rate;
@@ -16,7 +20,7 @@ public class Product {
         this.status = status;
     }
 
-    public Product(String name, String rate, String description, String price, String amount, String status) {
+    public Product(String name, double rate, String description, double price, int amount, String status) {
         this.name = name;
         this.rate = rate;
         this.description = description;
@@ -41,11 +45,11 @@ public class Product {
         this.name = name;
     }
 
-    public String getRate() {
+    public double getRate() {
         return rate;
     }
 
-    public void setRate(String rate) {
+    public void setRate(double rate) {
         this.rate = rate;
     }
 
@@ -57,19 +61,19 @@ public class Product {
         this.description = description;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

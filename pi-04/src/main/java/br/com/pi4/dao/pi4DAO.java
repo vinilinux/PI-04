@@ -289,10 +289,10 @@ public class pi4DAO
             while (resultSet.next()) {
                 String id_product = resultSet.getString("ID_PRODUCT");
                 String name = resultSet.getString("NAME_PRODUCT");
-                String rate = resultSet.getString("RATING_PRODUCT");
+                double rate = resultSet.getDouble("RATING_PRODUCT");
                 String description = resultSet.getString("DESCRIPTION_PRODUCT");
-                String price = resultSet.getString("PRICE_PRODUCT");
-                String amount = resultSet.getString("AMOUNT_PRODUCT");
+                double price = resultSet.getDouble("PRICE_PRODUCT");
+                int amount = resultSet.getInt("AMOUNT_PRODUCT");
                 String status = resultSet.getString("STATUS");
                 String imageProductPath = resultSet.getString("IMAGE_PRODUCT_PATH");
                 String imageDefault = resultSet.getString("IMAGE_DEFAULT");
@@ -313,7 +313,35 @@ public class pi4DAO
         return listProduct;
     }
 
+    public void createProduct(Product product) {
+        String SQL = "INSERT INTO TBL_PRODUCT (NAME_PRODUCT, RATING_PRODUCT, DESCRIPTION_PRODUCT, PRICE_PRODUCT, " +
+                "AMOUNT_PRODUCT, STATUS) VALUES (?,?,?,?,?,?)";
 
+        try {
+            Class.forName(DB_DRIVER);
 
+            Connection connection = conexao();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setDouble(2, product.getRate());
+            preparedStatement.setString(3, product.getDescription());
+            preparedStatement.setDouble(4, product.getPrice());
+            preparedStatement.setInt(5, product.getAmount());
+            preparedStatement.setString(6, product.getStatus());
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+            connection.close();
+
+            System.out.println("Success in insertion");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Driver not found");
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+    }
 
 }
