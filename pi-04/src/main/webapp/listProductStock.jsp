@@ -59,7 +59,7 @@
                 <th>Valor</th>
                 <th>Status</th>
                 <th>Alterar</th>
-                <th>Visualizar</th>
+
             </tr>
         </thead>
         <tbody>
@@ -84,7 +84,6 @@
                     </td>
                     <td><a href="EditProductServlet?id=${product.id_product}&mode=update">Alterar
                             Produto</a></td>
-                    <td>${product.imageProductPath}</td>
                 </tr>
             </c:forEach>
         </tbody>
