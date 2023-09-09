@@ -270,11 +270,11 @@ public class pi4DAO
         }
     }
 
-    public List<Product> findAllProducts(String loggedInUserId) {
-        String SQL = "SELECT P.*, PI.IMAGE_PRODUCT_PATH, PI.IMAGE_DEFAULT " +
+    public List<Product> findAllProducts() {
+        String SQL = "SELECT P.ID_PRODUCT, P.NAME_PRODUCT, P.RATING_PRODUCT, P.DESCRIPTION_PRODUCT, P.PRICE_PRODUCT, " +
+                "P.AMOUNT_PRODUCT, P.STATUS, PI.IMAGE_PRODUCT_PATH, PI.IMAGE_DEFAULT " +
                 "FROM TBL_PRODUCT P " +
                 "LEFT JOIN TBL_PRODUCT_IMAGE PI ON P.ID_PRODUCT = PI.ID_PRODUCT " +
-                "WHERE P.ID_PRODUCT >= ? " +
                 "ORDER BY P.ID_PRODUCT DESC";
 
         List<Product> listProduct = new ArrayList<>();
@@ -283,8 +283,6 @@ public class pi4DAO
             Class.forName(DB_DRIVER);
             Connection connection = conexao();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL);
-
-            preparedStatement.setString(1, loggedInUserId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -314,6 +312,7 @@ public class pi4DAO
 
         return listProduct;
     }
+
 
 
 
