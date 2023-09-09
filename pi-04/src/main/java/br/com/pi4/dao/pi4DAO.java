@@ -1,6 +1,8 @@
 package br.com.pi4.dao;
 
 import br.com.pi4.model.Pi4;
+import br.com.pi4.model.Product;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -267,6 +269,52 @@ public class pi4DAO
             return false;
         }
     }
+
+    public List<Product> findAllProducts(String loggedInUserId) {
+        String SQL = "SELECT P.*, PI.IMAGE_PRODUCT_PATH, PI.IMAGE_DEFAULT " +
+                "FROM TBL_PRODUCT P " +
+                "LEFT JOIN TBL_PRODUCT_IMAGE PI ON P.ID_PRODUCT = PI.ID_PRODUCT " +
+                "WHERE P.ID_PRODUCT >= ? " +
+                "ORDER BY P.ID_PRODUCT DESC";
+
+        List<Product> listProduct = new ArrayList<>();
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, loggedInUserId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String id_product = resultSet.getString("ID_PRODUCT");
+                String name = resultSet.getString("NAME_PRODUCT");
+                String rate = resultSet.getString("RATING_PRODUCT");
+                String description = resultSet.getString("DESCRIPTION_PRODUCT");
+                String price = resultSet.getString("PRICE_PRODUCT");
+                String amount = resultSet.getString("AMOUNT_PRODUCT");
+                String status = resultSet.getString("STATUS");
+                String imageProductPath = resultSet.getString("IMAGE_PRODUCT_PATH");
+                String imageDefault = resultSet.getString("IMAGE_DEFAULT");
+
+                Product product = new Product(id_product, name, rate, description, price, amount, status);
+                product.setImageProductPath(imageProductPath);
+                product.setImageDefault(imageDefault);
+
+                listProduct.add(product);
+            }
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Fail in database connection!");
+            e.printStackTrace();
+        }
+
+        return listProduct;
+    }
+
 
 
 }

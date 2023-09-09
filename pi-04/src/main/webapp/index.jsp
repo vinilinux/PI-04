@@ -4,7 +4,7 @@
 
     <a href="/logout"><b>Logout</b></a>
     <a href="/ListUserServlet"><b>Listar Usuario</b></a>
-    <a href=""><b>Listar Produtos</b></a>
+    <a href="/ListProductServlet"><b>Listar Produtos</b></a>
     <a href=""><b>Listar Pedidos</b></a>
     <a href="/loginUsuario.jsp"><b>Login</b></a>
 
