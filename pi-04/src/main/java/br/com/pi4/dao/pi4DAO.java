@@ -19,7 +19,7 @@ public class pi4DAO
 {
     private static final String DB_URL = "jdbc:mysql://localhost/PI4";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
+    private static final String DB_PASSWORD = "N0va-S3nh@";
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private Connection conexao() throws SQLException {
@@ -311,6 +311,118 @@ public class pi4DAO
         }
 
         return listProduct;
+    }
+
+    public void createProduct(Product product) {
+        String SQL = "INSERT INTO TBL_PRODUCT (NAME_PRODUCT, RATING_PRODUCT, DESCRIPTION_PRODUCT, PRICE_PRODUCT, " +
+                "AMOUNT_PRODUCT, STATUS) VALUES (?,?,?,?,?,?)";
+
+        try {
+            Class.forName(DB_DRIVER);
+
+            Connection connection = conexao();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setString(2, product.getRate());
+            preparedStatement.setString(3, product.getDescription());
+            preparedStatement.setString(4, product.getPrice());
+            preparedStatement.setString(5, product.getAmount());
+            preparedStatement.setString(6, product.getStatus());
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+            connection.close();
+
+            System.out.println("Success in insertion");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Driver not found");
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+    }
+
+    public Product updateProduto(Product pi4) {
+        String SQL = "UPDATE TBL_PRODUCT SET NAME_PRODUCT = ?, DESCRIPTION_PRODUCT = ?, PRICE_PRODUCT = ?, AMOUNT_PRODUCT = ? WHERE ID_PRODUCT = ?";
+        try {
+
+            Class.forName(DB_DRIVER);
+
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, pi4.getName());
+            preparedStatement.setString(2, pi4.getDescription());
+            preparedStatement.setString(3, pi4.getPrice());
+            preparedStatement.setString(4, pi4.getAmount());
+            preparedStatement.setString(5, pi4.getId_product());
+
+
+            System.out.println("Attempting to update user with ID: " + pi4.getId_product());
+
+            preparedStatement.executeUpdate();
+
+            connection.close();
+
+            System.out.println("success in update");
+
+        } catch (Exception e) {
+
+            System.out.println("fail in connection");
+            System.out.println("Error: " + e.getMessage());
+
+        }
+        return pi4;
+
+    }
+
+    public Product getProductById(String id)
+    {
+        Product product = null;
+        String sql = "SELECT * FROM TBL_PRODUCT WHERE ID_USER = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    product = new Product();
+                    product.setId_product(rs.getString("ID_PRODUCT"));
+                    product.setName(rs.getString("NAME_PRODUCT"));
+                    product.setRate(rs.getString("RATING_PRODUCT"));
+                    product.setDescription(rs.getString("DESCRIPTION_PRODUCT"));
+                    product.setPrice(rs.getString("PRICE_PRODUCT"));
+                    product.setAmount(rs.getString("AMOUNT_PRODUCT"));
+                    product.setStatus(rs.getString("STATUS"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
+
+    public boolean atualizarStatusProduto(String productId, String novoStatus) {
+        String SQL = "UPDATE TBL_PRODUCT SET STATUS = ? WHERE ID_PRODUCT = ?";
+        try {
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, novoStatus);
+            preparedStatement.setString(2, productId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            connection.close();
+
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
