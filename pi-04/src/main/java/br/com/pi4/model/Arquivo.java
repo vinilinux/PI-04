@@ -1,13 +1,12 @@
 package br.com.pi4.model;
 
-import javax.imageio.IIOException;
 import javax.servlet.http.Part;
 import java.io.*;
 import java.util.Date;
 
 public class Arquivo {
 
-    public void upload(String diretorio, Part part, InputStream arquivoCarregado) throws FileNotFoundException {
+    public String upload(String diretorio, Part part, InputStream arquivoCarregado) throws FileNotFoundException {
         String nomeDoArquivoOriginal = nomeArquivoOriginal(part);
         Long currentTime = new Date().getTime();
         String fileName = currentTime.toString().concat("-").concat(nomeDoArquivoOriginal.replace(" ", ""));
@@ -16,9 +15,10 @@ public class Arquivo {
         FileOutputStream saida = new FileOutputStream(novoArquivo);
         copiar(arquivoCarregado, saida);
         System.out.println("Imagens adicionadas com sucesso");
+        return caminhoArquivo;
     }
 
-    private String nomeArquivoOriginal(Part part) {
+    public String nomeArquivoOriginal(Part part) {
         String contentDisposition = part.getHeader("content-disposition");
         String[] tokens = contentDisposition.split(";");
         for (String token : tokens) {

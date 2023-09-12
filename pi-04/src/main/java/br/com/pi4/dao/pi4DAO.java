@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class pi4DAO
-{
+public class pi4DAO {
     private static final String DB_URL = "jdbc:mysql://localhost/PI4";
     private static final String DB_USER = "vini";
     private static final String DB_PASSWORD = "123@Mudar";
@@ -122,7 +121,7 @@ public class pi4DAO
     }
 
 
-    public void deleteUserById (String id){
+    public void deleteUserById(String id) {
         String SQL = "DELETE FROM USER_BACKOFFICE WHERE ID_USER = ?";
 
         try {
@@ -188,8 +187,7 @@ public class pi4DAO
         return user;
     }
 
-    public Pi4 getUserById(String id)
-    {
+    public Pi4 getUserById(String id) {
         Pi4 user = null;
         String sql = "SELECT * FROM USER_BACKOFFICE WHERE ID_USER = ?";
 
@@ -313,16 +311,16 @@ public class pi4DAO
         return listProduct;
     }
 
-    public void createProduct(Product product) {
+    public String createProduct(Product product) {
         String SQL = "INSERT INTO TBL_PRODUCT (NAME_PRODUCT, RATING_PRODUCT, DESCRIPTION_PRODUCT, PRICE_PRODUCT, " +
                 "AMOUNT_PRODUCT, STATUS) VALUES (?,?,?,?,?,?)";
 
+        String idProduct = null;
+
         try {
             Class.forName(DB_DRIVER);
-
             Connection connection = conexao();
-
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, product.getName());
             preparedStatement.setDouble(2, product.getRate());
@@ -330,6 +328,39 @@ public class pi4DAO
             preparedStatement.setDouble(4, product.getPrice());
             preparedStatement.setInt(5, product.getAmount());
             preparedStatement.setString(6, product.getStatus());
+
+            preparedStatement.executeUpdate();
+
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+
+            if (generatedKeys.next()) {
+                idProduct = generatedKeys.getString(1);
+            }
+
+            preparedStatement.close();
+            connection.close();
+
+            System.out.println("Success in insertion");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Driver not found");
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+        return idProduct;
+
+    }
+
+    public void inserirImg(String imgPath, String imgDefault, String idProduct) {
+        String sql = "INSERT INTO TBL_PRODUCT_IMAGE (IMAGE_PRODUCT_PATH, IMAGE_DEFAULT, ID_PRODUCT) VALUES (?,?,?)";
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, imgPath);
+            preparedStatement.setString(2, imgDefault);
+            preparedStatement.setString(3, idProduct);
 
             preparedStatement.executeUpdate();
 

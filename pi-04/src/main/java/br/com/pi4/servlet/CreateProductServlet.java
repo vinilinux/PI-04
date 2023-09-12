@@ -23,7 +23,9 @@ public class CreateProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         pi4DAO db = new pi4DAO();
+
         String productName = request.getParameter("productName");
         System.out.println(productName);
         double rate = Double.parseDouble(request.getParameter("rate"));
@@ -37,15 +39,30 @@ public class CreateProductServlet extends HttpServlet {
         String status = "ativo";
 
         Product product = new Product(productName, rate, description, price, amount, status);
-        db.createProduct(product);
+
+        String idProduct = db.createProduct(product);
+
+
+
+        String nameImgDefault = request.getParameter("selectedImage");
+        System.out.println(nameImgDefault);
 
         
         for (Part newfile : request.getParts()) {
             if (newfile.getName().equals("images[]")) {
+                String imgDefault;
                 System.out.println(newfile.getName());
                 InputStream arquivoCarrgado = newfile.getInputStream();
                 Arquivo arquivo = new Arquivo();
-                arquivo.upload("src/img", newfile, arquivoCarrgado);
+                String caminho = arquivo.upload("src/img", newfile, arquivoCarrgado);
+                String nomeImg = arquivo.nomeArquivoOriginal(newfile);
+
+                if (nomeImg.equals(nameImgDefault)) {
+                    imgDefault = "yes";
+                } else {
+                    imgDefault = "no";
+                }
+                db.inserirImg(caminho, imgDefault, idProduct);
             }
         }
     }
