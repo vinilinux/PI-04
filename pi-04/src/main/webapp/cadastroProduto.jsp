@@ -28,43 +28,37 @@
         <h2>Cadastro</h2>
     </section>
 
-    <form id="form" class="form" action="CreateProduct" method="post">
+    <form id="form" class="form" action="createProduct" method="post" enctype="multipart/form-data">
 
         <div class="form-content">
             <label for="productName">Nome do Produto</label>
-            <input type="text" id="productName" name="productName" placeholder="Digite o nome do Produto"
-                   value="${Product.name}"
-                   required />
+            <input type="text" id="productName" name="productName" placeholder="Digite o nome do Produto" required />
         </div>
 
         <div class="form-content">
             <label for="description">Descrição</label>
-            <input type="text" id="description" name="description" placeholder="Digite a descrição"
-                   value="${Produ}"
-                   required/>
+            <input type="text" id="description" name="description" placeholder="Digite a descrição" required/>
             <span class="erro-msg"></span>
         </div>
 
         <div class="form-content">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Digite seu email" value="${user.email}" required disabled/>
-            <input type="hidden" id="hiddenEmail" name="hiddenEmail" value="${user.email}" />
+            <label for="rate">Avaliação</label>
+            <input type="number" id="rate" name="rate" placeholder="Avaliação de 1 à 5" required />
         </div>
 
 
         <div class="form-content">
-            <label for="password">Senha</label>
-            <input type="password" id="password" name="password" placeholder="Digite sua senha" value="${user.password}" required />
+            <label for="price">Preço</label>
+            <input type="number" id="price" name="price" placeholder="Informe o preço" required />
         </div>
 
         <div class="form-content">
-            <label for="password-confirmation">Confirmação de senha</label>
-            <input type="password" id="password-confirmation" name="password-confirmation" placeholder="Digite sua senha novamente" value="${user.password}" required />
+            <label for="amount">Quantidade</label>
+            <input type="number" id="amount" name="amount" placeholder="Informe a quantidade"
+                   required />
         </div>
 
         <div class="error-message" id="error-message"></div>
-
-
 
         <p>Status:</p><br>
         <div class="box-select">
@@ -81,16 +75,10 @@
             </div>
         </div><br>
 
-        <p>Grupo:</p><br>
-        <input type="radio" id="grupo-admin" value="administrador" name="grupo"
-        ${user.group_user == 'administrador' ? 'checked' : ''}>
-        <label for="grupo-admin">Administrador</label>
-
-        <input type="radio" id="grupo-estoq" value="estoquista" name="grupo"
-        ${user.group_user == 'estoquista' ? 'checked' : ''}>
-        <label for="grupo-estoq">Estoquista</label>
-
-
+        <div class="form-content">
+            <label for="images">Imagens</label>
+            <input type="file" id="images" name="images[]" multiple accept="image/*" />
+        </div>
 
         <div class="form-content">
             <button type="submit">Cadastrar</button>
@@ -104,7 +92,6 @@
                 }
             }
         </script>
-
 
     </form>
 </body>
