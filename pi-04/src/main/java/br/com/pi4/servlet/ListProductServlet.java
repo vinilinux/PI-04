@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @WebServlet ("/ListProductServlet")
@@ -23,7 +24,8 @@ public class ListProductServlet extends HttpServlet {
         pi4DAO productDAO = new pi4DAO();
 
         String loggedInUserId = (String) request.getSession().getAttribute("loggedInUserId");
-        List<Product> products = productDAO.findAllProducts();
+        List<Product> products = productDAO.allProduct();
+        Collections.reverse(products);
         request.setAttribute("productsList", products);
 
         request.getRequestDispatcher("/listProduct.jsp").forward(request, response);

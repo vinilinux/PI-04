@@ -311,6 +311,41 @@ public class pi4DAO {
         return listProduct;
     }
 
+    public List<Product> allProduct() {
+        String sql = "Select * from TBL_PRODUCT";
+        List<Product> listProduct = new ArrayList<>();
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String id_product = resultSet.getString("ID_PRODUCT");
+                String name = resultSet.getString("NAME_PRODUCT");
+                double rate = resultSet.getDouble("RATING_PRODUCT");
+                String description = resultSet.getString("DESCRIPTION_PRODUCT");
+                double price = resultSet.getDouble("PRICE_PRODUCT");
+                int amount = resultSet.getInt("AMOUNT_PRODUCT");
+                String status = resultSet.getString("STATUS");
+
+                Product product = new Product(id_product, name, rate, description, price, amount, status);
+
+                listProduct.add(product);
+            }
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Fail in database connection!");
+            e.printStackTrace();
+        }
+
+        return listProduct;
+
+    }
+
     public String createProduct(Product product) {
         String SQL = "INSERT INTO TBL_PRODUCT (NAME_PRODUCT, RATING_PRODUCT, DESCRIPTION_PRODUCT, PRICE_PRODUCT, " +
                 "AMOUNT_PRODUCT, STATUS) VALUES (?,?,?,?,?,?)";

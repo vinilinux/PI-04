@@ -21,21 +21,22 @@ import java.util.List;
 @MultipartConfig
 public class CreateProductServlet extends HttpServlet {
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.getSession().removeAttribute("user");
+        request.getRequestDispatcher("/cadastroProduto.jsp").forward(request, response);
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         pi4DAO db = new pi4DAO();
 
         String productName = request.getParameter("productName");
-        System.out.println(productName);
         double rate = Double.parseDouble(request.getParameter("rate"));
-        System.out.println(rate);
         String description = request.getParameter("description");
-        System.out.println(description);
         double price = Double.parseDouble(request.getParameter("price"));
-        System.out.println(price);
         int amount = Integer.parseInt(request.getParameter("amount"));
-        System.out.println(amount);
         String status = "ativo";
 
         Product product = new Product(productName, rate, description, price, amount, status);
@@ -51,19 +52,21 @@ public class CreateProductServlet extends HttpServlet {
         for (Part newfile : request.getParts()) {
             if (newfile.getName().equals("images[]")) {
                 String imgDefault;
-                System.out.println(newfile.getName());
                 InputStream arquivoCarrgado = newfile.getInputStream();
                 Arquivo arquivo = new Arquivo();
                 String caminho = arquivo.upload("src/img", newfile, arquivoCarrgado);
                 String nomeImg = arquivo.nomeArquivoOriginal(newfile);
+                System.out.println(nomeImg + " Nome original");
 
                 if (nomeImg.equals(nameImgDefault)) {
                     imgDefault = "yes";
                 } else {
                     imgDefault = "no";
                 }
+                System.out.println(imgDefault);
                 db.inserirImg(caminho, imgDefault, idProduct);
             }
         }
+        response.sendRedirect("ListProductServlet");
     }
 }
