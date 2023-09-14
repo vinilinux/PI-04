@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -23,14 +26,14 @@
       <div class="col-md-6">
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-intervale="false">
           <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img class="d-block w-100" src="Images/racao-golden-special-.webp" alt="Primeiro Slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="Images/racao22.webp" alt="Segundo Slide">
-            </div>
+            <c:forEach var="img" items="${product_img}" varStatus="status">
+              <c:set var="activeClass" value="${status.index == 0 ? 'active' : ''}" />
+              <div class="carousel-item ${activeClass}">
+                <img class="d-block w-100" src="${img.image_path}" alt="${img.image_defaulth}">
+              </div>
+            </c:forEach>
           </div>
-          
+
           <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Anterior</span>
@@ -41,46 +44,37 @@
           </a>
         </div>
       </div>
-      
+
       <div class="col-md-6">
-        <h3>Ração Golden para Cães Adultos Frango e Carne 15Kg </h3><br>
+        <h3>${product.name}</h3><br>
 
         <p class="mb-3"><strong>Avaliação</strong></p>
-        <div id="rating-container">
-          <a onclick="Avaliar(1)">
-            <img src="Images/star0.png" id="star1">
-          </a>
 
-          <a onclick="Avaliar(2)">
-            <img src="Images/star0.png" id="star2">
-          </a>
+        <div id="estrelas-container"></div>
 
-          <a onclick="Avaliar(3)">
-            <img src="Images/star0.png" id="star3">
-          </a>
+          <script>
+            var rateDouble = ${product.rate};
+            var rateInt = Math.floor(rateDouble);
+            var decimalPart = rateDouble - rateInt;
+            var estrelasContainer = document.getElementById('estrelas-container');
+            for (var i = 0; i < rateInt; i++) {
+              var img = document.createElement('img');
+              img.src = 'Images/icons8-estrela-50.png';
+              estrelasContainer.appendChild(img);
+            }
 
-          <a onclick="Avaliar(4)">
-            <img src="Images/star0.png" id="star4">
-          </a>
-
-          <a onclick="Avaliar(5)">
-            <img src="Images/star0.png" id="star5">
-          </a>
-        </div>
-
-        <p id="rating"></p>
-
+            if (decimalPart > 0) {
+              var img = document.createElement('img');
+              img.src = 'Images/icons8-estrela-meio-vazia-50.png';
+              estrelasContainer.appendChild(img);
+            }
+          </script>
+          <br/>
         <p><strong>Descrição do Produto:</strong></p>
-        
-        <ul>
-          <li>Indicada para cães adultos;</li>
-          <li>Blens de proteínas;</li>
-          <li>Músculos mais forte;</li>
-          <li>Redução do odor das fezes;</li>
-          <li>Indicada para cães adultos;</li>
-          <li>Livre de aromatizantes e corantes artificiais;</li><br>
 
-          <h1 class="text-secondary">R$ 99,99</h1>
+        <p>${product.description}</p>
+
+          <h1 class="text-secondary">${product.price}</h1>
           <p><strong>Disponibilidade: Em estoque</p>
           <div class="form-group">
             <label for="quantidade">Quantidade:</label><br>
