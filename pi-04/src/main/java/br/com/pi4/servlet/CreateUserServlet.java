@@ -11,16 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 
 @WebServlet("/CreateUserServlet")
 public class CreateUserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         request.getSession().removeAttribute("user");
         request.getRequestDispatcher("/cadastroUsuario.jsp").forward(request, response);
     }
@@ -34,24 +31,16 @@ public class CreateUserServlet extends HttpServlet {
         String status = "ativo";
         String group_user = request.getParameter("grupo");
 
-        HashServlet hashpass = new HashServlet();
-
-        String hashedPassword = null;
-        try {
-            hashedPassword = hashpass.encryptarSenha(password);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+        // Método para hash de senha incorporado na CreateUserServlet
+        String hashedPassword = hashPassword(password);
 
         Pi4 pi4 = new Pi4(id_user, name, email, hashedPassword, cpf, status, group_user);
         pi4DAO db = new pi4DAO();
 
-        if (email != null && !email.isEmpty()){
-
-            if (db.isEmailAlreadyRegistered(email)){
+        if (email != null && !email.isEmpty()) {
+            if (db.isEmailAlreadyRegistered(email)) {
                 response.getWriter().println("E-mail já cadastrado!");
-            }else {
-
+            } else {
                 if (id_user != null && !id_user.isEmpty()) {
                     db.updatePi4(pi4);
                     response.getWriter().println("Usuário atualizado com sucesso!");
@@ -61,9 +50,20 @@ public class CreateUserServlet extends HttpServlet {
                     response.getWriter().println("Usuário cadastrado com sucesso!");
                 }
             }
-        }else{
+        } else {
             response.getWriter().println("E-mail inválido.");
         }
+    }
 
+    // Método para hash de senha incorporado na CreateUserServlet
+    private String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(password.getBytes());
+            return Base64.getEncoder().encodeToString(hashBytes);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
