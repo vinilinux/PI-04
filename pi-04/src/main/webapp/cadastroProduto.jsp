@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: vinicius
-  Date: 12/09/2023
-  Time: 19:18
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -25,37 +18,39 @@
 </head>
 <body>
 <div class="container mt-5">
-  <h1>Formulário de Produto</h1>
-  <form action="createProduct" method="post" enctype="multipart/form-data">
+  <h1>${empty product.id_product ? 'Cadastrar Produto' : 'Atualizar Produto'}</h1>
+  <form id="form" action="${empty product.id_product ? '/createProduct' : '/EditProductStockServlet'}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id_product" value="${product.id_product}">
     <div class="mb-3">
       <label for="productName" class="form-label">Nome do Produto</label>
-      <input type="text" class="form-control" id="productName" name="productName" required>
+      <input type="text" class="form-control" id="productName" name="productName" value="${product.name}" required>
     </div>
     <div class="mb-3">
       <label for="description" class="form-label">Descrição</label>
-      <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+      <textarea class="form-control" id="description" name="description" rows="4" required>${product.description}</textarea>
     </div>
     <div class="mb-3">
       <label for="rate" class="form-label">Avaliação</label>
-      <input type="number" class="form-control" id="rate" name="rate" min="1" max="5" required>
+      <input type="number" class="form-control" id="rate" name="rate" value="${product.rate}" min="1" max="5" required>
     </div>
     <div class="mb-3">
       <label for="price" class="form-label">Preço</label>
-      <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+      <input type="number" class="form-control" id="price" name="price" value="${product.price}" step="0.01" required>
     </div>
     <div class="mb-3">
       <label for="amount" class="form-label">Quantidade</label>
-      <input type="number" class="form-control" id="amount" name="amount" required>
+      <input type="number" class="form-control" id="amount" name="amount" value="${product.amount}" required>
     </div>
     <div class="mb-3">
-    <label for="images" class="form-label">Selecione imagens</label>
-    <input class="form-control" type="file" id="images" name="images[]" accept="image/*" multiple
-           onchange="handleFiles(this.files)"/>
-  </div>
+      <label for="images" class="form-label">Selecione imagens</label>
+      <input class="form-control" type="file" id="images" name="images[]" accept="image/*" multiple onchange="handleFiles(this.files)"/>
+    </div>
+
+
 
     <div class="row mt-3" id="thumbnails"></div>
-    <input type="hidden" id="selectedImage" name="selectedImage"/>
-    <button type="submit" class="btn btn-primary">Enviar</button>
+    <input type="hidden" id="selectedImage" name="selectedImage" value="${product.imageDefault}"/>
+    <button type="submit" class="btn btn-primary">${empty product.id_product ? 'Cadastrar' : 'Atualizar'}</button>
   </form>
 </div>
 
@@ -78,7 +73,7 @@
       image.className = "img-thumbnail imgthumbnail";
       image.src = URL.createObjectURL(file);
       console.log(image.className + file.name)
-      let acaoAconteceu = false;
+
       image.onclick = function () {
         image.classList.add("destaque");
         document.getElementById("selectedImage").value = file.name;
@@ -91,6 +86,6 @@
     }
   }
 </script>
+<script src="/JavaScript/remocaoEnctype.js"></script>
 </body>
 </html>
-

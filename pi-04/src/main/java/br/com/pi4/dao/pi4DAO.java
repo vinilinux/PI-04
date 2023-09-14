@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 public class pi4DAO {
     private static final String DB_URL = "jdbc:mysql://localhost/PI4";
-    private static final String DB_USER = "vini";
-    private static final String DB_PASSWORD = "123@Mudar";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private Connection conexao() throws SQLException {
@@ -205,6 +205,7 @@ public class pi4DAO {
                     user.setCpf(rs.getString("CPF"));
                     user.setStatus(rs.getString("STATUS"));
                     user.setGroup_user(rs.getString("GROUP_USER"));
+
                 }
             }
         } catch (Exception e) {
@@ -212,6 +213,62 @@ public class pi4DAO {
         }
         return user;
     }
+
+    public Product getProductById(String id) {
+        Product product = null;
+        String sql = "SELECT P.ID_PRODUCT, P.NAME_PRODUCT, P.RATING_PRODUCT, P.DESCRIPTION_PRODUCT, P.PRICE_PRODUCT, " +
+                "P.AMOUNT_PRODUCT, P.STATUS, PI.IMAGE_PRODUCT_PATH, PI.IMAGE_DEFAULT " +
+                "FROM TBL_PRODUCT P " +
+                "LEFT JOIN TBL_PRODUCT_IMAGE PI ON P.ID_PRODUCT = PI.ID_PRODUCT " +
+                "WHERE P.ID_PRODUCT = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, Integer.parseInt(id));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    product = new Product();
+                    product.setId_product(rs.getString("ID_PRODUCT"));
+                    product.setName(rs.getString("NAME_PRODUCT"));
+                    product.setRate(rs.getDouble("RATING_PRODUCT"));
+                    product.setDescription(rs.getString("DESCRIPTION_PRODUCT"));
+                    product.setPrice(rs.getDouble("PRICE_PRODUCT"));
+                    product.setAmount(rs.getInt("AMOUNT_PRODUCT"));
+                    product.setStatus(rs.getString("STATUS"));
+                    product.setImageProductPath(rs.getString("IMAGE_PRODUCT_PATH"));
+                    product.setImageDefault(rs.getString("IMAGE_DEFAULT"));
+                    System.out.println("Product found in database!");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Product not found in database!");
+        }
+        return product;
+    }
+
+
+    public boolean updateProductAmount(String productId, int amount) {
+        String sql = "UPDATE TBL_PRODUCT SET AMOUNT_PRODUCT = ? WHERE ID_PRODUCT = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, amount);
+            stmt.setInt(2, Integer.parseInt(productId));
+
+            int affectedRows = stmt.executeUpdate();
+            System.out.println("Affected rows: " + affectedRows);
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
     public Pi4 updatePi4(Pi4 pi4) {
         String SQL = "UPDATE USER_BACKOFFICE SET NAME = ?, EMAIL = ?, PASSWORD = ?, CPF = ?, STATUS = ?, GROUP_USER = ? WHERE ID_USER = ?";
