@@ -313,6 +313,45 @@ public class pi4DAO {
         return null; // Retorna null se não encontrar o group_user
     }
 
+    public Pi4 getEmail(String email) {
+        String SQL = "SELECT * FROM USER_BACKOFFICE WHERE EMAIL = ? ";
+
+        Pi4 user = null;
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                user = new Pi4(
+                        resultSet.getString("ID_USER"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("EMAIL"),
+                        resultSet.getString("PASSWORD"),
+                        resultSet.getString("CPF"),
+                        resultSet.getString("STATUS"),
+                        resultSet.getString("GROUP_USER")
+                );
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+            System.out.println("success in login attempt");
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("fail in login attempt");
+        }
+
+        return user;
+    }
+
 
 
     public Pi4 updatePi4(Pi4 pi4) {

@@ -19,7 +19,7 @@
 <body>
 <div class="container mt-5">
   <h1>${empty product.id_product ? 'Cadastrar Produto' : 'Atualizar Produto'}</h1>
-  <form id="form" action="${empty product.id_product ? '/createProduct' : '/EditProductStockServlet'}" method="post" enctype="multipart/form-data">
+  <form id="form" action="${empty product.id_product ? '/createProduct' : '/EditProductStockServlet'}" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id_product" value="${product.id_product}">
     <div class="mb-3">
       <label for="productName" class="form-label">Nome do Produto</label>

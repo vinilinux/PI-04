@@ -9,7 +9,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @WebServlet("/EditProductStockServlet")
 public class EditProductStockServlet extends HttpServlet {
@@ -35,143 +38,91 @@ public class EditProductStockServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email"); // Suponhamos que você tenha o email do usuário
 
-        if (email == null || email.isEmpty()) {
-            // Trate o caso em que o email não está presente
-            return;
-        }
+        pi4DAO userDao = new pi4DAO();
 
-        pi4DAO dao = new pi4DAO();
-        String groupUser = dao.getGroupUserByEmail(email);
-
-        if (groupUser != null && groupUser.equals("estoquista")) {
-            String productId = request.getParameter("id_product");
-            String amount = request.getParameter("amount");
-
-            System.out.println("Product ID: " + productId);
-            System.out.println("Amount: " + amount);
-
-            if (productId == null || productId.isEmpty() || amount == null || amount.isEmpty()) {
-                return;
-            }
+        String email = "1234@1234.com";
+        System.out.println("ta indo");
 
 
-            pi4DAO productDao = new pi4DAO();
-            boolean isUpdated = productDao.updateProductAmount(productId, Integer.parseInt(amount));
-            System.out.println("Product ID: " + productId);
-            System.out.println("Amount: " + amount);
+        pi4DAO db = new pi4DAO();
+        Pi4 user = db.getEmail(email);
 
-            if (isUpdated) {
-                System.out.println("Product quantity updated successfully!");
+        if (user != null) {
+            if (user.getStatus().equals("ativo")) {
+
+                System.out.println("Email: " + email);
+
+
+                if (user.getGroup_user().equals("administrador")) {
+
+                    String productId = request.getParameter("id_product");
+                    String productName = request.getParameter("name");
+                    String description = request.getParameter("description");
+                    String rate = request.getParameter("rate");
+                    String price = request.getParameter("price");
+                    String amount = request.getParameter("amount");
+
+                    System.out.println("Product ID: " + productId);
+                    System.out.println("Name: " + productName);
+                    System.out.println("description: " + description);
+                    System.out.println("rate: " + rate);
+                    System.out.println("price: " + price);
+                    System.out.println("Amount: " + amount);
+
+                    if (productId == null || productId.isEmpty() ||
+                            productName == null || productName.isEmpty() ||
+                            description == null || description.isEmpty()) {
+                        return;
+                    }
+
+
+                    pi4DAO productDao = new pi4DAO();
+                    boolean isUpdated = productDao.updateAllProduct(productId, Integer.parseInt(String.valueOf(amount)));
+                    System.out.println("Product ID: " + productId);
+                    System.out.println("Amount: " + amount);
+
+                    if (isUpdated) {
+                        System.out.println("Product quantity updated successfully!");
+                    } else {
+                        System.out.println("Failed to update product quantity!");
+                    }
+
+                    response.sendRedirect("/ListProductStockServlet");
+
+
+                } else {
+                    String productId = request.getParameter("id_product");
+                    String amount = request.getParameter("amount");
+
+                    System.out.println("Product ID: " + productId);
+                    System.out.println("Amount: " + amount);
+
+                    if (productId == null || productId.isEmpty()) {
+                        return;
+                    }
+
+
+                    pi4DAO productDao = new pi4DAO();
+                    boolean isUpdated = productDao.updateProductAmount(productId, Integer.parseInt(String.valueOf(amount)));
+                    System.out.println("Product ID: " + productId);
+                    System.out.println("Amount: " + amount);
+
+                    if (isUpdated) {
+                        System.out.println("Product quantity updated successfully!");
+                    } else {
+                        System.out.println("Failed to update product quantity!");
+                    }
+
+                    response.sendRedirect("/ListProductStockServlet");
+
+                }
             } else {
-                System.out.println("Failed to update product quantity!");
+                System.out.println("Login não foi possível. Usuário inativo.");
             }
-
-            response.sendRedirect("/ListProductStockServlet");
         } else {
-
-            String productId = request.getParameter("id_product");
-            String productName = request.getParameter("name");
-            String description = request.getParameter("description");
-            String rate = request.getParameter("rate");
-            String price = request.getParameter("price");
-            String amount = request.getParameter("amount");
-
-            System.out.println("Product ID: " + productId);
-            System.out.println("Name: " + productName);
-            System.out.println("description: " + description);
-            System.out.println("rate: " + rate);
-            System.out.println("price: " + price);
-            System.out.println("Amount: " + amount);
-
-            if (productId == null || productId.isEmpty() ||
-                    productName == null || productName.isEmpty() ||
-                    description == null || description.isEmpty() ||
-                    rate == null || rate.isEmpty() ||
-                    price == null || price.isEmpty() ||
-                    amount == null || amount.isEmpty()) {
-                return;
-            }
-
-
-            pi4DAO productDao = new pi4DAO();
-            boolean isUpdated = productDao.updateAllProduct(productId, Integer.parseInt(amount));
-            System.out.println("Product ID: " + productId);
-            System.out.println("Amount: " + amount);
-
-            if (isUpdated) {
-                System.out.println("Product quantity updated successfully!");
-            } else {
-                System.out.println("Failed to update product quantity!");
-            }
-
-            response.sendRedirect("/ListProductStockServlet");
-
+            request.setAttribute("errorMessage", "E-mail ou senha inválido!");
         }
-//        Pi4 pi4 = new Pi4();
-//        if (pi4.getGroup_user().equals ("estoquista")){
-//            String productId = request.getParameter("id_product");
-//            String amount = request.getParameter("amount");
-//
-//            System.out.println("Product ID: " + productId);
-//            System.out.println("Amount: " + amount);
-//
-//            if (productId == null || productId.isEmpty() || amount == null || amount.isEmpty()) {
-//                return;
-//            }
-//
-//
-//            pi4DAO productDao = new pi4DAO();
-//            boolean isUpdated = productDao.updateProductAmount(productId, Integer.parseInt(amount));
-//            System.out.println("Product ID: " + productId);
-//            System.out.println("Amount: " + amount);
-//
-//            if (isUpdated) {
-//                System.out.println("Product quantity updated successfully!");
-//            } else {
-//                System.out.println("Failed to update product quantity!");
-//            }
-//
-//            response.sendRedirect("/ListProductStockServlet");
-//        } else {
-//            String productId = request.getParameter("id_product");
-//            String productName = request.getParameter("name");
-//            String description = request.getParameter("description");
-//            String rate = request.getParameter("rate");
-//            String price = request.getParameter("price");
-//            String amount = request.getParameter("amount");
-//
-//            System.out.println("Product ID: " + productId);
-//            System.out.println("Name: " + productName);
-//            System.out.println("description: " + description);
-//            System.out.println("rate: " + rate);
-//            System.out.println("price: " + price);
-//            System.out.println("Amount: " + amount);
-//
-//            if (productId == null || productId.isEmpty() ||
-//                    productName == null || productName.isEmpty() ||
-//                    description == null || description.isEmpty() ||
-//                    rate == null || rate.isEmpty() ||
-//                    price == null || price.isEmpty() ||
-//                    amount == null || amount.isEmpty()) {
-//                return;
-//            }
-//
-//
-//            pi4DAO productDao = new pi4DAO();
-//            boolean isUpdated = productDao.updateAllProduct(productId, Integer.parseInt(amount));
-//            System.out.println("Product ID: " + productId);
-//            System.out.println("Amount: " + amount);
-//
-//            if (isUpdated) {
-//                System.out.println("Product quantity updated successfully!");
-//            } else {
-//                System.out.println("Failed to update product quantity!");
-//            }
-//
-//            response.sendRedirect("/ListProductStockServlet");
-//        }
 
     }
 
