@@ -69,20 +69,8 @@
                     <td>${product.name}</td>
                     <td>${product.amount}</td>
                     <td>${product.price}</td>
-                    <td>
-                        <form id="updateForm${product.id_product}" action="EditProductServlet"
-                            method="post">
-                            <input type="hidden" name="productId" value="${product.id_product}">
-                            <select name="status" onchange="confirmAndUpdate(${product.id_product})">
-                                <option value="ativo" ${user.status=='ativo' ? 'selected' : '' }>Ativo
-                                </option>
-                                <option value="inativo" ${user.status=='inativo' ? 'selected' : '' }>Inativo
-                                </option>
-                            </select>
-                            <input type="hidden" name="action" value="updateStatus">
-                        </form>
-                    </td>
-                    <td><a href="EditProductServlet?id=${product.id_product}&mode=update">Alterar
+                    <td>${product.status}</td>
+                    <td><a href="EditProductStockServlet?id=${product.id_product}&mode=update">Alterar
                             Produto</a></td>
                 </tr>
             </c:forEach>
