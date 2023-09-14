@@ -31,7 +31,8 @@
     </div>
     <div class="mb-3">
       <label for="rate" class="form-label">Avaliação</label>
-      <input type="number" class="form-control" id="rate" name="rate" value="${product.rate}" min="1" max="5" required>
+      <input type="number" class="form-control" id="rate" name="rate" value="${product.rate}" min="1" max="5"
+             step="0.1" required>
     </div>
     <div class="mb-3">
       <label for="price" class="form-label">Preço</label>

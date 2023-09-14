@@ -59,6 +59,7 @@
         <th>Valor</th>
         <th>Status</th>
         <th>Alterar</th>
+        <th>Visualizar</th>
 
     </tr>
     </thead>
@@ -84,6 +85,7 @@
             </td>
             <td><a href="EditProductServlet?id=${product.id_product}&mode=update">Alterar
                 Produto</a></td>
+            <td><a href="/visualizarProduct?id=${product.id_product}&productName=${product.name}&rate=${product.rate}&description=${product.description}&price=${product.price}">Visualizar</a></td>
         </tr>
     </c:forEach>
     </tbody>
