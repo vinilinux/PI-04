@@ -19,8 +19,5 @@ public class HashServlet {
         String senhaHex = hexString.toString();
 
         return senhaHex;
-
     }
-
-
 }
