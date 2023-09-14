@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -26,6 +27,7 @@
       <div class="col-md-6">
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-intervale="false">
           <div class="carousel-inner">
+
             <c:forEach var="img" items="${product_img}" varStatus="status">
               <c:set var="activeClass" value="${status.index == 0 ? 'active' : ''}" />
               <div class="carousel-item ${activeClass}">
@@ -33,7 +35,6 @@
               </div>
             </c:forEach>
           </div>
-
           <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Anterior</span>
@@ -75,6 +76,7 @@
         <p>${product.description}</p>
 
           <h1 class="text-secondary">${product.price}</h1>
+
           <p><strong>Disponibilidade: Em estoque</p>
           <div class="form-group">
             <label for="quantidade">Quantidade:</label><br>
