@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class pi4DAO {
     private static final String DB_URL = "jdbc:mysql://localhost/PI4";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
+    private static final String DB_PASSWORD = "N0va-S3nh@";
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private Connection conexao() throws SQLException {
@@ -266,6 +266,51 @@ public class pi4DAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean updateAllProduct(String productId, int amount) {
+        String sql = "UPDATE TBL_PRODUCT SET AMOUNT_PRODUCT = ? WHERE ID_PRODUCT = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, amount);
+            stmt.setInt(2, Integer.parseInt(productId));
+
+            int affectedRows = stmt.executeUpdate();
+            System.out.println("Affected rows: " + affectedRows);
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public String getGroupUserByEmail(String email) {
+        String SQL = "SELECT GROUP_USER FROM USER_BACKOFFICE WHERE EMAIL = ?";
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String groupUser = resultSet.getString("GROUP_USER");
+                return groupUser;
+            }
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Fail in database connection!");
+            e.printStackTrace();
+        }
+
+        return null; // Retorna null se não encontrar o group_user
     }
 
 
