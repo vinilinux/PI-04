@@ -41,28 +41,27 @@ public class EditProductStockServlet extends HttpServlet {
 
         pi4DAO userDao = new pi4DAO();
 
-        String email = "1234@1234.com";
-        System.out.println("ta indo");
-
-
         pi4DAO db = new pi4DAO();
-        Pi4 user = db.getEmail(email);
+        String id_user = request.getParameter("id_user");
+        Pi4 user = db.getUserById(id_user);
+
 
         if (user != null) {
             if (user.getStatus().equals("ativo")) {
 
-                System.out.println("Email: " + email);
-
 
                 if (user.getGroup_user().equals("administrador")) {
 
+                    System.out.println("Linha 55");
+
                     String productId = request.getParameter("id_product");
-                    String productName = request.getParameter("name");
+                    String productName = request.getParameter("productName");
                     String description = request.getParameter("description");
                     String rate = request.getParameter("rate");
                     String price = request.getParameter("price");
                     String amount = request.getParameter("amount");
 
+                    System.out.println("Linha 64");
                     System.out.println("Product ID: " + productId);
                     System.out.println("Name: " + productName);
                     System.out.println("description: " + description);
@@ -73,13 +72,21 @@ public class EditProductStockServlet extends HttpServlet {
                     if (productId == null || productId.isEmpty() ||
                             productName == null || productName.isEmpty() ||
                             description == null || description.isEmpty()) {
+                        System.out.println("Condição null");
                         return;
                     }
 
+                    System.out.println("Linha 79");
+
 
                     pi4DAO productDao = new pi4DAO();
-                    boolean isUpdated = productDao.updateAllProduct(productId, Integer.parseInt(String.valueOf(amount)));
+                    boolean isUpdated = productDao.updateAllProduct(productId, productName, Double.parseDouble(String.valueOf(rate)),
+                            description, Double.parseDouble(String.valueOf(price)), Integer.parseInt(String.valueOf(amount)));
                     System.out.println("Product ID: " + productId);
+                    System.out.println("Name: " + productName);
+                    System.out.println("Rate: " + rate);
+                    System.out.println("Description: " + description);
+                    System.out.println("Price: " + price);
                     System.out.println("Amount: " + amount);
 
                     if (isUpdated) {
@@ -88,10 +95,10 @@ public class EditProductStockServlet extends HttpServlet {
                         System.out.println("Failed to update product quantity!");
                     }
 
-                    response.sendRedirect("/ListProductStockServlet");
+                    response.sendRedirect("/ListProductServlet");
 
 
-                } else {
+                } else if(user.getGroup_user().equals("estoquista")){
                     String productId = request.getParameter("id_product");
                     String amount = request.getParameter("amount");
 
@@ -116,6 +123,8 @@ public class EditProductStockServlet extends HttpServlet {
 
                     response.sendRedirect("/ListProductStockServlet");
 
+                }else{
+                    System.out.println("Deu rui");
                 }
             } else {
                 System.out.println("Login não foi possível. Usuário inativo.");

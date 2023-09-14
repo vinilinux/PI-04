@@ -70,7 +70,7 @@
             <td>${product.amount}</td>
             <td>${product.price}</td>
             <td>
-                <form id="updateForm${product.id_product}" action="EditProductServlet"
+                <form id="updateForm${product.id_product}" action="EditProductStockServlet"
                       method="post">
                     <input type="hidden" name="productId" value="${product.id_product}">
                     <select name="status" onchange="confirmAndUpdate(${product.id_product})">
@@ -82,7 +82,7 @@
                     <input type="hidden" name="action" value="updateStatus">
                 </form>
             </td>
-            <td><a href="EditProductServlet?id=${product.id_product}&mode=update">Alterar
+            <td><a href="EditProductStockServlet?id=${product.id_product}&mode=update">Alterar
                 Produto</a></td>
         </tr>
     </c:forEach>

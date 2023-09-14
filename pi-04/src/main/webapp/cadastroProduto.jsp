@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,6 +22,7 @@
   <h1>${empty product.id_product ? 'Cadastrar Produto' : 'Atualizar Produto'}</h1>
   <form id="form" action="${empty product.id_product ? '/createProduct' : '/EditProductStockServlet'}" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id_product" value="${product.id_product}">
+    <input type="hidden" name="id_user" value="${user.id_user}"/>
     <div class="mb-3">
       <label for="productName" class="form-label">Nome do Produto</label>
       <input type="text" class="form-control" id="productName" name="productName" value="${product.name}" required>
@@ -86,6 +88,19 @@
     }
   }
 </script>
-<script src="/JavaScript/remocaoEnctype.js"></script>
+
+<c:choose>
+  <c:when test="${not empty user and user.group_user ne 'administrador'}">
+    <script src="/JavaScript/remocaoEnctype.js"></script>
+  </c:when>
+  <c:otherwise>
+    <script src="/JavaScript/remocaoEnctype2.js"></script>
+  </c:otherwise>
+</c:choose>
+
+<%--<c:if test="${user.group_user ne 'administrador'}">--%>
+<%--  <script src="/JavaScript/remocaoEnctype.js"></script>--%>
+<%--</c:if>--%>
+<%--<script src="/JavaScript/remocaoEnctype2.js"></script>--%>
 </body>
 </html>

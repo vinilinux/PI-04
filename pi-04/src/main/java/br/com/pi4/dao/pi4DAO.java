@@ -268,20 +268,31 @@ public class pi4DAO {
         }
     }
 
-    public boolean updateAllProduct(String productId, int amount) {
-        String sql = "UPDATE TBL_PRODUCT SET AMOUNT_PRODUCT = ? WHERE ID_PRODUCT = ?";
+    public boolean updateAllProduct(String productId, String name, double rate, String description, double price, int amount ) {
+        String sql = "UPDATE TBL_PRODUCT SET NAME_PRODUCT = ?, RATING_PRODUCT = ?, DESCRIPTION_PRODUCT = ?, " +
+                "PRICE_PRODUCT = ?, AMOUNT_PRODUCT = ? WHERE ID_PRODUCT = ?";
+
+        System.out.println("Linha 275 - UPDATE SQL");
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, amount);
-            stmt.setInt(2, Integer.parseInt(productId));
+            stmt.setInt(1, Integer.parseInt(name));
+            stmt.setInt(2, Integer.parseInt(String.valueOf(rate)));
+            stmt.setInt(3, Integer.parseInt(description));
+            stmt.setInt(4, Integer.parseInt(String.valueOf(price)));
+            stmt.setInt(5, Integer.parseInt(String.valueOf(amount)));
+            stmt.setInt(6, Integer.parseInt(productId));
+
+            System.out.println("Linha 287 - TRY");
+
 
             int affectedRows = stmt.executeUpdate();
             System.out.println("Affected rows: " + affectedRows);
             return affectedRows > 0;
 
         } catch (SQLException e) {
+            System.out.println("Linha 295 - Exception");
             e.printStackTrace();
             return false;
         }
