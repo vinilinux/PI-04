@@ -15,6 +15,10 @@ function Avaliar(estrela) {
     document.getElementById('rating').innerHTML = avaliacao;
   
   }
+
+var botao = document.getElementById("botao");
+
+botao.disabled = true;
   
   
   

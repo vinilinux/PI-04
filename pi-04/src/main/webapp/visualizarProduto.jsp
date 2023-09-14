@@ -31,7 +31,7 @@
             <c:forEach var="img" items="${product_img}" varStatus="status">
               <c:set var="activeClass" value="${status.index == 0 ? 'active' : ''}" />
               <div class="carousel-item ${activeClass}">
-                <img class="d-block w-100" src="${img.image_path}" alt="${img.image_defaulth}">
+                <img class="d-block w-100" src="${img.image_path}" alt="${img.image_default}">
               </div>
             </c:forEach>
           </div>
@@ -69,6 +69,7 @@
               img.src = 'Images/icons8-estrela-meio-vazia-50.png';
               estrelasContainer.appendChild(img);
             }
+
           </script>
           <br/>
         <p><strong>Descrição do Produto:</strong></p>
@@ -82,7 +83,7 @@
             <label for="quantidade">Quantidade:</label><br>
             <input type="number" class="form-control-light" id="quantidade" value="1">
           </div>
-          <button class="btn btn-danger">Comprar</button>
+          <button id="botao" class="btn btn-danger" disabled>Comprar</button>
       </div>
     </div>
   </div>

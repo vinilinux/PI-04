@@ -52,6 +52,7 @@
     <div class="row mt-3" id="thumbnails"></div>
     <input type="hidden" id="selectedImage" name="selectedImage" value="${product.imageDefault}"/>
     <button type="submit" class="btn btn-primary">${empty product.id_product ? 'Cadastrar' : 'Atualizar'}</button>
+    <a href="/ListProductServlet" class="btn btn-secondary">Cancelar</a>
   </form>
 </div>
 

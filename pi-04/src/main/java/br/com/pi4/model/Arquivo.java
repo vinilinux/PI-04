@@ -15,7 +15,7 @@ public class Arquivo {
         FileOutputStream saida = new FileOutputStream(novoArquivo);
         copiar(arquivoCarregado, saida);
         System.out.println("Imagens adicionadas com sucesso");
-        return caminhoArquivo;
+        return "img/" + fileName;
     }
 
     public String nomeArquivoOriginal(Part part) {

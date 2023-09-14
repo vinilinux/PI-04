@@ -2,6 +2,7 @@ package br.com.pi4.dao;
 
 import br.com.pi4.model.Pi4;
 import br.com.pi4.model.Product;
+import br.com.pi4.model.image;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -467,4 +468,35 @@ public class pi4DAO {
         }
     }
 
-}
+    public List<image> selectImage(String id) {
+        String sql = "Select IMAGE_PRODUCT_PATH, IMAGE_DEFAULT from TBL_PRODUCT_IMAGE where ID_PRODUCT = ? ";
+        List<image> images = new ArrayList<>();
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String image_path = resultSet.getString("IMAGE_PRODUCT_PATH");
+                String image_default = resultSet.getString("IMAGE_DEFAULT");
+
+                image image = new image(image_path, image_default);
+
+                images.add(image);
+            }
+
+            connection.close();
+            return images;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    }

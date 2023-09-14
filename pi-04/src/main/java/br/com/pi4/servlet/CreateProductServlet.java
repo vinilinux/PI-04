@@ -54,7 +54,7 @@ public class CreateProductServlet extends HttpServlet {
                 String imgDefault;
                 InputStream arquivoCarrgado = newfile.getInputStream();
                 Arquivo arquivo = new Arquivo();
-                String caminho = arquivo.upload("src/img", newfile, arquivoCarrgado);
+                String caminho = arquivo.upload("src/main/webapp/img", newfile, arquivoCarrgado);
                 String nomeImg = arquivo.nomeArquivoOriginal(newfile);
                 System.out.println(nomeImg + " Nome original");
 
