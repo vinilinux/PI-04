@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class pi4DAO {
     private static final String DB_URL = "jdbc:mysql://localhost/PI4";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "N0va-S3nh@";
+    private static final String DB_PASSWORD = "";
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private Connection conexao() throws SQLException {
