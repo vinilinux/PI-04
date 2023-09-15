@@ -269,6 +269,146 @@ public class pi4DAO {
         }
     }
 
+    public boolean updateAllProduct(String productId, String name, double rate, String description, double price, int amount) {
+        String sql = "UPDATE TBL_PRODUCT SET NAME_PRODUCT = ?, RATING_PRODUCT = ?, DESCRIPTION_PRODUCT = ?, " +
+                "PRICE_PRODUCT = ?, AMOUNT_PRODUCT = ? WHERE ID_PRODUCT = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Certifique-se de que os valores não nulos sejam passados
+            if (productId == null || name == null || description == null) {
+                System.out.println("Parâmetros nulos não permitidos");
+                return false;
+            }
+
+            // Verifique se os valores podem ser convertidos em números antes de tentar a conversão
+            double parsedRate;
+            try {
+                parsedRate = Double.parseDouble(String.valueOf(rate));
+            } catch (NumberFormatException e) {
+                System.out.println("Erro de conversão para 'rate': " + e.getMessage());
+                return false;
+            }
+
+            double parsedPrice;
+            try {
+                parsedPrice = Double.parseDouble(String.valueOf(price));
+            } catch (NumberFormatException e) {
+                System.out.println("Erro de conversão para 'price': " + e.getMessage());
+                return false;
+            }
+
+            int parsedAmount;
+            try {
+                parsedAmount = Integer.parseInt(String.valueOf(amount));
+            } catch (NumberFormatException e) {
+                System.out.println("Erro de conversão para 'amount': " + e.getMessage());
+                return false;
+            }
+
+            int parsedProductId;
+            try {
+                parsedProductId = Integer.parseInt(productId);
+            } catch (NumberFormatException e) {
+                System.out.println("Erro de conversão para 'productId': " + e.getMessage());
+                return false;
+            }
+
+            stmt.setString(1, name);
+            stmt.setDouble(2, parsedRate);
+            stmt.setString(3, description);
+            stmt.setDouble(4, parsedPrice);
+            stmt.setInt(5, parsedAmount);
+            stmt.setInt(6, parsedProductId);
+
+            int affectedRows = stmt.executeUpdate();
+            System.out.println("Linha 287 - TRY");
+            System.out.println("Affected rows: " + affectedRows);
+
+            if (affectedRows > 0) {
+                System.out.println("Product quantity updated successfully!");
+                return true;
+            } else {
+                System.out.println("Failed to update product quantity!");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Linha 295 - Exception");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+    public String getGroupUserByEmail(String email) {
+        String SQL = "SELECT GROUP_USER FROM USER_BACKOFFICE WHERE EMAIL = ?";
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String groupUser = resultSet.getString("GROUP_USER");
+                return groupUser;
+            }
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Fail in database connection!");
+            e.printStackTrace();
+        }
+
+        return null; // Retorna null se não encontrar o group_user
+    }
+
+
+    public Pi4 getEmail(String email) {
+        String SQL = "SELECT * FROM USER_BACKOFFICE WHERE EMAIL = ? ";
+
+        Pi4 user = null;
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                user = new Pi4(
+                        resultSet.getString("ID_USER"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("EMAIL"),
+                        resultSet.getString("PASSWORD"),
+                        resultSet.getString("CPF"),
+                        resultSet.getString("STATUS"),
+                        resultSet.getString("GROUP_USER")
+                );
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+            System.out.println("success in login attempt");
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("fail in login attempt");
+        }
+
+        return user;
+    }
+
 
 
     public Pi4 updatePi4(Pi4 pi4) {
@@ -325,6 +465,8 @@ public class pi4DAO {
             return false;
         }
     }
+
+
 
     public List<Product> findAllProducts() {
         String SQL = "SELECT P.ID_PRODUCT, P.NAME_PRODUCT, P.RATING_PRODUCT, P.DESCRIPTION_PRODUCT, P.PRICE_PRODUCT, " +
