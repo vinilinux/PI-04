@@ -69,14 +69,15 @@
             <td>${product.name}</td>
             <td>${product.amount}</td>
             <td>${product.price}</td>
+            <td>${product.status}</td>
             <td>
                 <form id="updateForm${product.id_product}" action="EditProductStockServlet"
                       method="post">
                     <input type="hidden" name="productId" value="${product.id_product}">
                     <select name="status" onchange="confirmAndUpdate(${product.id_product})">
-                        <option value="ativo" ${user.status=='ativo' ? 'selected' : '' }>Ativo
+                        <option value="ativo" ${product.status=='ativo' ? 'selected' : '' }>Ativo
                         </option>
-                        <option value="inativo" ${user.status=='inativo' ? 'selected' : '' }>Inativo
+                        <option value="inativo" ${product.status=='inativo' ? 'selected' : '' }>Inativo
                         </option>
                     </select>
                     <input type="hidden" name="action" value="updateStatus">
