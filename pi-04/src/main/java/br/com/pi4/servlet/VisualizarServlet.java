@@ -15,7 +15,8 @@ import java.util.Comparator;
 import java.util.List;
 
 @WebServlet("/visualizarProduct")
-public class VisualizarServlet extends HttpServlet {
+public class
+VisualizarServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
