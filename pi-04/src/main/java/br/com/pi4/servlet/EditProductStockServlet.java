@@ -39,6 +39,22 @@ public class EditProductStockServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        String action = request.getParameter("action");
+
+        if (action != null && action.equals("updateStatus")) {
+            String productId = request.getParameter("productId");
+            String newStatus = request.getParameter("status");
+
+            pi4DAO productDao = new pi4DAO();
+            boolean updateSuccess = productDao.atualizarStatusProduto(productId, newStatus);
+
+            if (updateSuccess) {
+                response.sendRedirect("/ListProductServlet");
+            } else {
+                System.out.println("Erro na atualização do Status!");
+            }
+        }
+
         pi4DAO userDao = new pi4DAO();
 
         pi4DAO db = new pi4DAO();

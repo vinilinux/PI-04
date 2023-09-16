@@ -466,6 +466,26 @@ public class pi4DAO {
         }
     }
 
+    public boolean atualizarStatusProduto(String productId, String novoStatus) {
+        String SQL = "UPDATE TBL_PRODUCT SET STATUS = ? WHERE ID_PRODUCT = ?";
+        try {
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+            preparedStatement.setString(1, novoStatus);
+            preparedStatement.setString(2, productId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            connection.close();
+
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 
     public List<Product> findAllProducts() {
