@@ -29,6 +29,17 @@ public class Product {
         this.status = status;
     }
 
+    public Product (String name, double rate, String description, double price, int amount, String status, String imageProductPath, String imageDefault){
+        this.name = name;
+        this.rate = rate;
+        this.description = description;
+        this.price = price;
+        this.amount = amount;
+        this.status = status;
+        this.imageProductPath = imageProductPath;
+        this.imageDefault = imageDefault;
+    }
+
     public String getId_product() {
         return id_product;
     }

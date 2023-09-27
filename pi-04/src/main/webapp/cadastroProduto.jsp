@@ -49,6 +49,15 @@
       <input class="form-control" type="file" id="images" name="images[]" accept="image/*" multiple onchange="handleFiles(this.files)"/>
     </div>
 
+    <div class="col-md-6">
+      <div class="row">
+        <c:forEach var="img" items="${product_img}">
+          <div class="col-md-4"> <!-- Defina o tamanho das colunas de acordo com o número de imagens por linha -->
+            <img class="img-fluid" src="${img.image_path}" alt="${img.image_default}">
+          </div>
+        </c:forEach>
+      </div>
+    </div>
 
 
     <div class="row mt-3" id="thumbnails"></div>

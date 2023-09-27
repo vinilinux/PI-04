@@ -1,17 +1,19 @@
 package br.com.pi4.servlet;
 
 import br.com.pi4.dao.pi4DAO;
+import br.com.pi4.model.Arquivo;
 import br.com.pi4.model.Pi4;
 import br.com.pi4.model.Product;
+import br.com.pi4.model.image;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @WebServlet("/EditProductStockServlet")
@@ -23,16 +25,42 @@ public class EditProductStockServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String productId = request.getParameter("id").trim();
+
         if (productId == null || productId.isEmpty()) {
             request.getSession().removeAttribute("product");
             response.sendRedirect("/cadastroProduto.jsp");
             return;
         }
 
+        System.out.println("xxxxxxxxx" + productId);
+
         pi4DAO productDao = new pi4DAO();
         Product product = productDao.getProductById(productId);
 
+        String imagePath = product.getImageProductPath();
+        System.out.println(imagePath);
+
+        List<image> imagens = productDao.selectImage(productId);
+
+        Collections.sort(imagens, new Comparator<image>() {
+            @Override
+            public int compare(image o1, image o2) {
+                if (o1.getImage_default().equals("yes")){
+                    return -1;
+                } else if (o2.getImage_default().equals("yes")){
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        System.out.println(imagens);
+
         request.setAttribute("product", product);
+
+        request.setAttribute("product_img", imagens);
+
         request.getRequestDispatcher("/cadastroProduto.jsp").forward(request, response);
     }
 
@@ -40,6 +68,7 @@ public class EditProductStockServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String action = request.getParameter("action");
+
 
         if (action != null && action.equals("updateStatus")) {
             String productId = request.getParameter("productId");
@@ -67,8 +96,6 @@ public class EditProductStockServlet extends HttpServlet {
 
 
                 if (user.getGroup_user().equals("administrador")) {
-
-                    System.out.println("Linha 55");
 
                     String productId = request.getParameter("id_product");
                     String productName = request.getParameter("productName");
@@ -98,6 +125,11 @@ public class EditProductStockServlet extends HttpServlet {
                     pi4DAO productDao = new pi4DAO();
                     boolean isUpdated = productDao.updateAllProduct(productId, productName, Double.parseDouble(String.valueOf(rate)),
                             description, Double.parseDouble(String.valueOf(price)), Integer.parseInt(String.valueOf(amount)));
+
+                    List<image> imagens = productDao.selectImage(productId);
+                    System.out.println("Imagens >>>>>>>>>>>" + imagens);
+
+
                     System.out.println("Product ID: " + productId);
                     System.out.println("Name: " + productName);
                     System.out.println("Rate: " + rate);
@@ -111,7 +143,38 @@ public class EditProductStockServlet extends HttpServlet {
                         System.out.println("Failed to update product quantity!");
                     }
 
+                    String nameImgDefault = request.getParameter("selectedImage");
+                    System.out.println(nameImgDefault);
+
+
+                    for (Part newfile : request.getParts()) {
+                        if (newfile.getName().equals("images[]")) {
+                            String imgDefault;
+                            InputStream arquivoCarrgado = newfile.getInputStream();
+                            Arquivo arquivo = new Arquivo();
+                            String caminho = arquivo.upload("src/main/webapp/img", newfile, arquivoCarrgado);
+                            if(caminho != null){
+
+
+                                productDao.deleteImageById(productId);
+
+                                String nomeImg = arquivo.nomeArquivoOriginal(newfile);
+                                System.out.println(nomeImg + " Nome original");
+
+                                if (nomeImg.equals(nameImgDefault)) {
+                                    imgDefault = "yes";
+                                } else {
+                                    imgDefault = "no";
+                                }
+                                System.out.println(imgDefault);
+                                db.inserirImg(caminho, imgDefault, productId);
+                            }
+
+                        }
+                    }
+
                     response.sendRedirect("/ListProductServlet");
+                    System.out.println("ImagensDeletadas >>>>>>>>>>>" + imagens);
 
 
                 } else if(user.getGroup_user().equals("estoquista")){
@@ -149,8 +212,7 @@ public class EditProductStockServlet extends HttpServlet {
             request.setAttribute("errorMessage", "E-mail ou senha inválido!");
         }
 
+
     }
 
 }
-
-

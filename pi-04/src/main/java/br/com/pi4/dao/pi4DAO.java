@@ -661,4 +661,54 @@ public class pi4DAO {
         }
     }
 
+    public void updateImage(String imgPath, String imgDefault, String idProduct){
+        String sql = "UPDATE TBL_PRODUCT_IMAGE SET IMAGE_PRODUCT_PATH = ?, IMAGE_DEFAULT = ? WHERE ID_PRODUCT = ?";
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, imgPath);
+            preparedStatement.setString(2, imgDefault);
+            preparedStatement.setString(3, idProduct);
+
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+            connection.close();
+
+            System.out.println("Success in update");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Driver not found");
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
     }
+
+    public void deleteImageById(String id) {
+        String sql = "DELETE FROM TBL_PRODUCT_IMAGE WHERE ID_PRODUCT = ?";
+
+        try {
+            Class.forName(DB_DRIVER);
+            Connection connection = conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, id);
+
+            // Use executeUpdate() para executar a instrução DELETE
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Verifique quantas linhas foram afetadas (opcional)
+            System.out.println("Linhas afetadas: " + rowsAffected);
+
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+}
